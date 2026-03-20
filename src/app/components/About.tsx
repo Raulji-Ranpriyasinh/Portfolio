@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'motion/react';
 import { useRef } from 'react';
-import { Sparkles, Video, Users, Bot, Code } from 'lucide-react';
+import { Sparkles, Users, Bot, Code } from 'lucide-react';
 
 const highlights = [
   {

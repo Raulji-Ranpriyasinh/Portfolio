@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'motion/react';
 import { useRef } from 'react';
-import { FolderGit2, ExternalLink, Github, Brain, MessageSquare, FileText, BarChart3, Camera, Bot, Clapperboard, ShoppingCart } from 'lucide-react';
+import { FolderGit2, Github, Brain, MessageSquare, FileText, BarChart3, Camera, Bot, Clapperboard, ShoppingCart } from 'lucide-react';
 
 const projects = [
   {
