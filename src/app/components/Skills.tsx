@@ -5,28 +5,28 @@ import { Code, Brain, Sparkles, Wrench } from 'lucide-react';
 
 const skillCategories = [
   {
-    title: 'Languages & Frameworks',
+    title: 'Programming & Full-Stack',
     icon: Code,
     color: 'from-blue-600 to-blue-700',
-    skills: ['Python', 'SQL', 'C++', 'HTML', 'CSS', 'Flask', 'FastAPI'],
-  },
-  {
-    title: 'AI/ML',
-    icon: Brain,
-    color: 'from-slate-600 to-slate-700',
-    skills: ['TensorFlow', 'PyTorch', 'OpenCV', 'Scikit-learn', 'Keras', 'NumPy', 'Pandas'],
+    skills: ['Python', 'TypeScript', 'JavaScript', 'SQL', 'C++', 'HTML', 'CSS', 'React', 'Flask', 'FastAPI'],
   },
   {
     title: 'Generative AI & NLP',
     icon: Sparkles,
     color: 'from-cyan-600 to-cyan-700',
-    skills: ['LLMs', 'Hugging Face', 'LangChain', 'RAG', 'Prompt Engineering', 'Azure OpenAI', 'Transformers'],
+    skills: ['LLMs', 'LangChain', 'CrewAI', 'Hugging Face Transformers', 'RAG Pipelines', 'Prompt Engineering', 'Azure OpenAI', 'Agent Systems'],
   },
   {
-    title: 'Tools & Technologies',
+    title: 'Data Science & ML',
+    icon: Brain,
+    color: 'from-slate-600 to-slate-700',
+    skills: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'Pandas', 'NumPy', 'OpenCV', 'Jupyter', 'Matplotlib'],
+  },
+  {
+    title: 'AI Systems & Tools',
     icon: Wrench,
     color: 'from-blue-700 to-blue-800',
-    skills: ['Git', 'GitHub', 'VS Code', 'REST APIs', 'Postman', 'MLOps', 'Docker'],
+    skills: ['Vector Databases', 'Semantic Search', 'REST APIs', 'Git', 'GitHub', 'Postman', 'VS Code', 'Docker'],
   },
 ];
 
@@ -48,7 +48,7 @@ export function Skills() {
             Skills & Expertise
           </h2>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-            A comprehensive toolkit for building intelligent AI solutions
+            A comprehensive toolkit spanning AI/ML, full-stack development, and data science
           </p>
         </motion.div>
 

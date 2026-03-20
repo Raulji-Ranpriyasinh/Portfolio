@@ -68,7 +68,8 @@ export function Navbar() {
             transition={{ delay: 0.2 }}
             className="text-xl font-semibold bg-gradient-to-r from-slate-800 via-blue-700 to-slate-900 bg-clip-text text-transparent"
           >
-////          </motion.div>
+            Ranpriyasinh Raulji
+          </motion.div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-1">

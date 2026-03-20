@@ -14,7 +14,7 @@ export function Footer() {
               Ranpriyasinh Raulji
             </h3>
             <p className="text-slate-300 leading-relaxed">
-              AI/ML Engineer passionate about building intelligent solutions that make a difference.
+              Freelance AI/ML Engineer, Full-Stack Developer & Data Scientist building intelligent solutions worldwide.
             </p>
           </div>
 
@@ -40,7 +40,7 @@ export function Footer() {
             <h4 className="text-lg font-semibold mb-4">Connect</h4>
             <div className="flex gap-4">
               <motion.a
-                href="https://github.com"
+                href="https://github.com/Raulji-Ranpriyasinh"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1, y: -2 }}
@@ -49,7 +49,7 @@ export function Footer() {
                 <Github size={20} />
               </motion.a>
               <motion.a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/ranpriyasinh-raulji"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1, y: -2 }}
@@ -58,7 +58,7 @@ export function Footer() {
                 <Linkedin size={20} />
               </motion.a>
               <motion.a
-                href="mailto:contact@example.com"
+                href="mailto:ranpriyasinhraulji@gmail.com"
                 whileHover={{ scale: 1.1, y: -2 }}
                 className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center hover:bg-white/20 transition-all duration-300"
               >

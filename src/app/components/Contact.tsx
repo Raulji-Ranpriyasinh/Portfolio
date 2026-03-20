@@ -32,22 +32,22 @@ export function Contact() {
     {
       icon: Mail,
       label: 'Email',
-      value: 'ranpriyasinh@example.com',
-      link: 'mailto:ranpriyasinh@example.com',
+      value: 'ranpriyasinhraulji@gmail.com',
+      link: 'mailto:ranpriyasinhraulji@gmail.com',
       color: 'from-blue-600 to-blue-700',
     },
     {
       icon: Linkedin,
       label: 'LinkedIn',
-      value: 'linkedin.com/in/ranpriyasinh',
-      link: 'https://linkedin.com',
+      value: 'linkedin.com/in/ranpriyasinh-raulji',
+      link: 'https://linkedin.com/in/ranpriyasinh-raulji',
       color: 'from-slate-600 to-slate-700',
     },
     {
       icon: Github,
       label: 'GitHub',
-      value: 'github.com/ranpriyasinh',
-      link: 'https://github.com',
+      value: 'github.com/Raulji-Ranpriyasinh',
+      link: 'https://github.com/Raulji-Ranpriyasinh',
       color: 'from-cyan-600 to-cyan-700',
     },
   ];
@@ -69,7 +69,7 @@ export function Contact() {
             </h2>
           </div>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-            Let's collaborate on your next AI project or discuss opportunities
+            Let's collaborate on your next AI/ML or full-stack project
           </p>
         </motion.div>
 
@@ -86,8 +86,8 @@ export function Contact() {
                 Let's Connect
               </h3>
               <p className="text-gray-600 leading-relaxed mb-8">
-                I'm always open to discussing new projects, creative ideas, or opportunities 
-                to be part of your vision. Whether you have a question or just want to say hi, 
+                I'm always open to freelance projects, consulting opportunities, and collaborations. 
+                Whether you need an AI/ML solution, a full-stack web app, or data science insights, 
                 feel free to reach out!
               </p>
             </div>
@@ -130,7 +130,7 @@ export function Contact() {
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-slate-400/10 to-cyan-600/10 rounded-2xl blur-xl" />
               <div className="relative bg-white/70 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-slate-200">
                 <p className="text-gray-700 text-center font-medium">
-                  🚀 Open to exciting AI/ML opportunities and collaborations
+                  Open to freelance AI/ML, full-stack, and data science projects worldwide
                 </p>
               </div>
             </motion.div>

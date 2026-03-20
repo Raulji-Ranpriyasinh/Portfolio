@@ -40,7 +40,8 @@ export function Hero() {
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-slate-800 via-blue-700 to-slate-900 bg-clip-text text-transparent">
-////            </h1>
+              Ranpriyasinh Raulji
+            </h1>
           </motion.div>
 
           <motion.h2
@@ -49,7 +50,7 @@ export function Hero() {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="text-2xl md:text-3xl text-slate-700 mb-6"
           >
-            AI/ML Engineer
+            AI/ML Engineer | Full-Stack Developer | Data Scientist
           </motion.h2>
 
           <motion.p
@@ -58,12 +59,12 @@ export function Hero() {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-8 leading-relaxed"
           >
-            Passionate about building innovative AI solutions using{' '}
+            Freelance AI/ML Engineer & Full-Stack Developer building intelligent solutions with{' '}
             <span className="text-blue-700 font-semibold">Generative AI</span>,{' '}
-            <span className="text-slate-700 font-semibold">NLP</span>,{' '}
-            <span className="text-cyan-700 font-semibold">Transformers</span> &{' '}
-            <span className="text-blue-700 font-semibold">Large Language Models</span>.
-            Transforming complex problems into intelligent, scalable solutions.
+            <span className="text-slate-700 font-semibold">RAG Pipelines</span>,{' '}
+            <span className="text-cyan-700 font-semibold">LLMs</span> &{' '}
+            <span className="text-blue-700 font-semibold">Full-Stack Web Apps</span>.
+            Transforming complex problems into scalable, production-ready AI applications.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -111,7 +112,7 @@ export function Hero() {
             className="flex justify-center gap-6"
           >
             <motion.a
-              href="https://github.com"
+              href="https://github.com/Raulji-Ranpriyasinh"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.2, rotate: 5 }}
@@ -120,7 +121,7 @@ export function Hero() {
               <Github size={24} />
             </motion.a>
             <motion.a
-              href="https://linkedin.com"
+              href="https://linkedin.com/in/ranpriyasinh-raulji"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.2, rotate: 5 }}
@@ -129,7 +130,7 @@ export function Hero() {
               <Linkedin size={24} />
             </motion.a>
             <motion.a
-              href="mailto:contact@example.com"
+              href="mailto:ranpriyasinhraulji@gmail.com"
               whileHover={{ scale: 1.2, rotate: 5 }}
               className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-700 hover:text-cyan-700 shadow-md hover:shadow-lg transition-all duration-300"
             >

@@ -5,27 +5,27 @@ import { Sparkles, Video, Users, Bot, Code } from 'lucide-react';
 
 const highlights = [
   {
-    icon: Video,
-    title: 'Text-to-Video Generation',
-    description: 'Developed cutting-edge text-to-video solutions using Azure Foundry Sora API',
+    icon: Bot,
+    title: 'Generative AI & LLM Systems',
+    description: 'Design and build RAG pipelines, conversational agents, and LLM-powered automation workflows for clients worldwide',
     color: 'from-blue-600 to-blue-700',
   },
   {
-    icon: Users,
-    title: 'AI-Powered Job Matching',
-    description: 'Built intelligent candidate-job matching engine using Azure OpenAI and NLP',
+    icon: Code,
+    title: 'Full-Stack Development',
+    description: 'End-to-end web application development with React, Flask, FastAPI, and modern frontend/backend architectures',
     color: 'from-slate-600 to-slate-700',
   },
   {
-    icon: Bot,
-    title: 'Backend Automation',
-    description: 'Created intelligent automation bots using Flask APIs and CrewAI framework',
+    icon: Sparkles,
+    title: 'Data Science & ML',
+    description: 'Data analysis, ML model development, and predictive systems using TensorFlow, PyTorch, Scikit-learn, and Pandas',
     color: 'from-cyan-600 to-cyan-700',
   },
   {
-    icon: Code,
-    title: 'RAG Systems',
-    description: 'Implemented role-based RAG systems and proposal generation agents',
+    icon: Users,
+    title: 'Freelance AI Solutions',
+    description: 'Delivering custom AI-driven automation, intelligent chatbots, and scalable ML solutions as an independent consultant',
     color: 'from-blue-700 to-blue-800',
   },
 ];
@@ -51,9 +51,9 @@ export function About() {
             </h2>
           </div>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            I'm an AI/ML Engineer specializing in building real-world AI solutions that make a difference. 
-            With expertise in Generative AI, NLP, and LLMs, I transform complex challenges into intelligent, 
-            scalable applications that drive business value.
+            I'm a freelance AI/ML Engineer, Full-Stack Developer, and Data Scientist specializing in building 
+            real-world AI solutions. With expertise in Generative AI, LLM-powered systems, and full-stack web 
+            development, I help businesses transform complex challenges into intelligent, scalable applications.
           </p>
         </motion.div>
 
@@ -95,20 +95,22 @@ export function About() {
           <div className="relative bg-white/70 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-xl border border-slate-200">
             <div className="prose prose-lg max-w-none">
               <p className="text-slate-700 leading-relaxed mb-4">
-                My journey in AI/ML has been driven by a passion for solving real-world problems through 
-                cutting-edge technology. From developing healthcare chatbots to building intelligent automation 
-                systems, I've consistently delivered solutions that combine technical excellence with practical impact.
+                As a freelance AI/ML Engineer and Full-Stack Developer, I've built a career around solving 
+                real-world problems through cutting-edge technology. From designing LLM-powered conversational 
+                agents and RAG-based documentation assistants to developing full-stack web applications, I 
+                deliver solutions that combine technical excellence with practical business impact.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                I specialize in leveraging the latest advancements in <span className="font-semibold text-blue-700">Generative AI</span>, 
-                <span className="font-semibold text-slate-800"> Transformers</span>, and <span className="font-semibold text-cyan-700">Large Language Models</span> to 
-                create innovative applications. My expertise spans from building RAG-based systems and prompt engineering 
-                to deploying production-ready ML workflows and REST APIs.
+                I specialize in <span className="font-semibold text-blue-700">Generative AI</span>, 
+                <span className="font-semibold text-slate-800">LangChain & CrewAI Agents</span>, and <span className="font-semibold text-cyan-700">Full-Stack Web Development</span>. 
+                My expertise spans building RAG pipelines with vector databases, prompt engineering, deploying 
+                production-ready ML workflows, and creating end-to-end web applications with React and Python backends.
               </p>
               <p className="text-slate-700 leading-relaxed">
-                Whether it's creating a text-to-video generation plugin, optimizing ML pipelines, or developing 
-                intelligent chatbots, I bring a comprehensive approach that balances innovation with reliability. 
-                I'm always excited to tackle new challenges and push the boundaries of what's possible with AI.
+                Whether it's building a text-to-video automation system, developing intelligent proposal generation 
+                agents, creating AI-powered note-taking apps, or engineering candidate-job matching engines, I bring 
+                a comprehensive full-stack approach. I'm passionate about delivering reliable AI architectures that 
+                enable intelligent automation for clients across industries.
               </p>
             </div>
           </div>

@@ -5,30 +5,31 @@ import { Briefcase, Calendar, MapPin } from 'lucide-react';
 
 const experiences = [
   {
-    role: 'AI Engineer',
-    company: 'vTech Solution Inc',
+    role: 'Freelance AI/ML Engineer & Full-Stack Developer',
+    company: 'Independent Consultant',
     location: 'Remote',
     period: '2024 - Present',
-    description: 'Leading AI initiatives and developing cutting-edge generative AI solutions',
+    description: 'Building end-to-end AI solutions and full-stack web applications for clients worldwide',
     achievements: [
-      'Developed text-to-video generation plugin using Azure Foundry Sora API',
-      'Built proposal generation RAG agent for automated document creation',
-      'Implemented CrewAI automation bot for workflow optimization',
-      'Created AI-powered job matching engine using Azure OpenAI',
+      'Developed a Generative AI text-to-video automation system using LLM pipelines and Azure OpenAI APIs for marketing content creation',
+      'Designed a RAG-based proposal generation assistant with vector database of historical data for contextual retrieval and automated drafting',
+      'Built AI automation pipelines using CrewAI agents for automated data extraction, web research, and decision-maker identification',
+      'Engineered an AI-based candidate-job matching engine using NLP techniques for recruitment screening',
+      'Automated backend workflows using intelligent bots for data extraction, transformation, and database insertion',
     ],
     color: 'from-blue-600 to-blue-700',
   },
   {
     role: 'Associate AI/ML Engineer',
-    company: 'Reyna Solutions',
-    location: 'Remote',
+    company: 'Freelance',
+    location: 'Vadodara, Gujarat',
     period: '2023 - 2024',
-    description: 'Focused on healthcare AI solutions and ML pipeline optimization',
+    description: 'Designed and implemented AI-powered healthcare and enterprise solutions',
     achievements: [
-      'Developed healthcare chatbot for patient engagement and support',
-      'Implemented role-based RAG system for secure document retrieval',
-      'Optimized ML workflow reducing processing time by 40%',
-      'Built Flask-based REST APIs for ML model deployment',
+      'Designed an LLM-powered conversational agent for healthcare appointment scheduling with calendar API integration',
+      'Developed a RAG-based documentation assistant for contextual knowledge retrieval using vector embeddings and semantic search',
+      'Implemented retrieval pipelines and embedding-based search to enhance response accuracy for AI-powered support systems',
+      'Contributed to AI-driven healthcare data workflows by integrating ML models and backend data pipelines',
     ],
     color: 'from-slate-600 to-slate-700',
   },
@@ -55,7 +56,7 @@ export function Experience() {
             </h2>
           </div>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-            Building innovative AI solutions across diverse industries
+            Delivering AI-powered solutions and full-stack applications as a freelance developer
           </p>
         </motion.div>
 
