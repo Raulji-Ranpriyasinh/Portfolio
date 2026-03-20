@@ -10,18 +10,16 @@ import { Footer } from './components/Footer';
 
 export default function App() {
   useEffect(() => {
-    // Smooth scrolling behavior
     document.documentElement.style.scrollBehavior = 'smooth';
-    
     return () => {
       document.documentElement.style.scrollBehavior = 'auto';
     };
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 font-['Inter',_sans-serif]">
+    <div className="min-h-screen bg-[#0a0a0a] text-white font-['Inter',_sans-serif] noise-bg">
       <Navbar />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <About />
         <Skills />

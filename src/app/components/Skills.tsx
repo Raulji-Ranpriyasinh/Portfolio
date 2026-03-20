@@ -1,32 +1,27 @@
 import { motion } from 'motion/react';
 import { useInView } from 'motion/react';
 import { useRef } from 'react';
-import { Code, Brain, Sparkles, Wrench } from 'lucide-react';
 
-const skillCategories = [
+const row1 = ['Python', 'TypeScript', 'React', 'LangChain', 'CrewAI', 'TensorFlow', 'PyTorch', 'Flask', 'FastAPI', 'OpenCV'];
+const row2 = ['LLMs', 'RAG Pipelines', 'Prompt Engineering', 'Azure OpenAI', 'Vector Databases', 'Semantic Search', 'Agent Systems', 'Hugging Face', 'Scikit-learn', 'Pandas'];
+const row3 = ['JavaScript', 'SQL', 'C++', 'NumPy', 'Jupyter', 'REST APIs', 'Git', 'Docker', 'Postman', 'HTML/CSS'];
+
+const techStack = [
   {
-    title: 'Programming & Full-Stack',
-    icon: Code,
-    color: 'from-blue-600 to-blue-700',
-    skills: ['Python', 'TypeScript', 'JavaScript', 'SQL', 'C++', 'HTML', 'CSS', 'React', 'Flask', 'FastAPI'],
+    category: 'AI & Generative AI',
+    items: ['LLMs', 'LangChain', 'CrewAI', 'RAG Pipelines', 'Prompt Engineering', 'Azure OpenAI', 'Hugging Face Transformers', 'Agent Systems', 'Vector Databases', 'Semantic Search'],
   },
   {
-    title: 'Generative AI & NLP',
-    icon: Sparkles,
-    color: 'from-cyan-600 to-cyan-700',
-    skills: ['LLMs', 'LangChain', 'CrewAI', 'Hugging Face Transformers', 'RAG Pipelines', 'Prompt Engineering', 'Azure OpenAI', 'Agent Systems'],
+    category: 'Data Science & ML',
+    items: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'Pandas', 'NumPy', 'OpenCV', 'Jupyter', 'Matplotlib'],
   },
   {
-    title: 'Data Science & ML',
-    icon: Brain,
-    color: 'from-slate-600 to-slate-700',
-    skills: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'Pandas', 'NumPy', 'OpenCV', 'Jupyter', 'Matplotlib'],
+    category: 'Full-Stack',
+    items: ['Python', 'TypeScript', 'JavaScript', 'React', 'Flask', 'FastAPI', 'REST APIs', 'SQL', 'HTML', 'CSS'],
   },
   {
-    title: 'AI Systems & Tools',
-    icon: Wrench,
-    color: 'from-blue-700 to-blue-800',
-    skills: ['Vector Databases', 'Semantic Search', 'REST APIs', 'Git', 'GitHub', 'Postman', 'VS Code', 'Docker'],
+    category: 'Tools',
+    items: ['Git', 'GitHub', 'Docker', 'Postman', 'VS Code'],
   },
 ];
 
@@ -35,84 +30,67 @@ export function Skills() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="skills" className="py-20 bg-gradient-to-b from-slate-100/50 to-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="skills" className="py-24 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          className="mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-slate-800 via-blue-700 to-slate-900 bg-clip-text text-transparent mb-4">
-            Skills & Expertise
+          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4 block">Skills</span>
+          <h2 className="text-3xl md:text-5xl font-bold">
+            Technologies I{' '}
+            <span className="gradient-text">work with</span>.
           </h2>
-          <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-            A comprehensive toolkit spanning AI/ML, full-stack development, and data science
-          </p>
         </motion.div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {skillCategories.map((category, categoryIndex) => (
+      {/* Marquee rows */}
+      <div className="space-y-4 mb-16">
+        {[row1, row2, row3].map((row, rowIndex) => (
+          <div key={rowIndex} className="overflow-hidden">
+            <div className={`flex gap-4 ${rowIndex % 2 === 0 ? 'animate-marquee' : 'animate-marquee-reverse'}`} style={{ width: 'max-content' }}>
+              {[...row, ...row].map((skill, i) => (
+                <div
+                  key={`${skill}-${i}`}
+                  className="px-5 py-2.5 rounded-full border border-white/10 bg-white/[0.02] text-white/50 text-sm font-medium whitespace-nowrap hover:border-white/30 hover:text-white/80 hover:bg-white/[0.05] transition-all duration-300 cursor-default"
+                >
+                  {skill}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Detailed stack */}
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {techStack.map((group, index) => (
             <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 30 }}
+              key={group.category}
+              initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
-              whileHover={{ scale: 1.02, y: -5 }}
-              className="group relative"
+              transition={{ duration: 0.6, delay: 0.1 + index * 0.08 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-slate-400/10 to-cyan-600/10 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300" />
-              <div className="relative bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-200">
-                {/* Header */}
-                <div className="flex items-center gap-4 mb-6">
-                  <div className={`p-3 rounded-xl bg-gradient-to-r ${category.color} shadow-lg`}>
-                    <category.icon className="text-white" size={28} />
-                  </div>
-                  <h3 className="text-2xl font-semibold text-slate-800">
-                    {category.title}
-                  </h3>
-                </div>
-
-                {/* Skills Grid */}
-                <div className="flex flex-wrap gap-3">
-                  {category.skills.map((skill, skillIndex) => (
-                    <motion.div
-                      key={skill}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                      transition={{
-                        duration: 0.3,
-                        delay: categoryIndex * 0.1 + skillIndex * 0.05,
-                      }}
-                      whileHover={{ scale: 1.1 }}
-                      className={`px-4 py-2 bg-gradient-to-r ${category.color} text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all duration-300 cursor-default`}
-                    >
-                      {skill}
-                    </motion.div>
-                  ))}
-                </div>
+              <h3 className="text-xs uppercase tracking-[0.2em] text-white/30 mb-4">{group.category}</h3>
+              <div className="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span
+                    key={item}
+                    className="px-3 py-1.5 text-sm rounded-lg border border-white/10 bg-white/[0.03] text-white/60 hover:text-white/90 hover:border-white/20 transition-all duration-300 cursor-default"
+                  >
+                    {item}
+                  </span>
+                ))}
               </div>
             </motion.div>
           ))}
         </div>
-
-        {/* Additional Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-12 text-center"
-        >
-          <div className="relative inline-block">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-slate-400/10 to-cyan-600/10 rounded-2xl blur-xl" />
-            <div className="relative bg-white/70 backdrop-blur-md px-8 py-6 rounded-2xl shadow-lg border border-slate-200">
-              <p className="text-slate-700 font-medium">
-                Continuously learning and adapting to the latest advancements in AI/ML
-              </p>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

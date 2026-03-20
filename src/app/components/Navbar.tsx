@@ -19,8 +19,6 @@ export function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-
-      // Update active section based on scroll position
       const sections = navItems.map((item) => item.href.slice(1));
       const currentSection = sections.find((section) => {
         const element = document.getElementById(section);
@@ -30,12 +28,10 @@ export function Navbar() {
         }
         return false;
       });
-
       if (currentSection) {
         setActiveSection(currentSection);
       }
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -53,26 +49,27 @@ export function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? 'bg-white/80 backdrop-blur-lg shadow-lg'
+          ? 'bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5'
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <motion.div
+          <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-xl font-semibold bg-gradient-to-r from-slate-800 via-blue-700 to-slate-900 bg-clip-text text-transparent"
+            onClick={() => scrollToSection('#home')}
+            className="text-lg font-bold tracking-tight"
           >
-            Ranpriyasinh Raulji
-          </motion.div>
+            <span className="gradient-text">R</span>
+            <span className="text-white/90">aulji</span>
+            <span className="text-white/30 ml-1 font-light">.</span>
+          </motion.button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-1">
+          <div className="hidden md:flex items-center gap-1">
             {navItems.map((item, index) => (
               <motion.button
                 key={item.name}
@@ -80,56 +77,67 @@ export function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
                 onClick={() => scrollToSection(item.href)}
-                className={`px-4 py-2 rounded-lg transition-all duration-300 relative ${
+                className={`px-3 py-1.5 text-sm rounded-full transition-all duration-300 relative ${
                   activeSection === item.href.slice(1)
-                    ? 'text-blue-700'
-                    : 'text-slate-700 hover:text-blue-700'
+                    ? 'text-white'
+                    : 'text-white/40 hover:text-white/70'
                 }`}
               >
                 {item.name}
                 {activeSection === item.href.slice(1) && (
                   <motion.div
-                    layoutId="activeSection"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600"
+                    layoutId="activeNav"
+                    className="absolute inset-0 bg-white/10 rounded-full border border-white/10"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
               </motion.button>
             ))}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="ml-4 flex items-center gap-2"
+            >
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs text-emerald-400/80 font-medium">Available for work</span>
+            </motion.div>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-slate-700"
+            className="md:hidden p-2 text-white/60 hover:text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="md:hidden bg-white/95 backdrop-blur-lg shadow-lg"
+          exit={{ opacity: 0, y: -10 }}
+          className="md:hidden bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5"
         >
-          <div className="px-4 py-4 space-y-2">
+          <div className="px-6 py-4 space-y-1">
             {navItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className={`block w-full text-left px-4 py-2 rounded-lg transition-all duration-300 ${
+                className={`block w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all duration-300 ${
                   activeSection === item.href.slice(1)
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-slate-700 hover:bg-gray-100'
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/40 hover:text-white/70 hover:bg-white/5'
                 }`}
               >
                 {item.name}
               </button>
             ))}
+            <div className="flex items-center gap-2 px-4 pt-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs text-emerald-400/80 font-medium">Available for work</span>
+            </div>
           </div>
         </motion.div>
       )}
