@@ -16,11 +16,6 @@ interface Point3D {
   z: number;
 }
 
-interface Edge {
-  from: number;
-  to: number;
-}
-
 function rotateX(p: Point3D, angle: number): Point3D {
   const cos = Math.cos(angle);
   const sin = Math.sin(angle);
@@ -44,47 +39,7 @@ function project(p: Point3D, cx: number, cy: number, fov: number): { x: number; 
   return { x: cx + p.x * scale, y: cy + p.y * scale, scale };
 }
 
-const cubeVertices: Point3D[] = [
-  { x: -1, y: -1, z: -1 },
-  { x:  1, y: -1, z: -1 },
-  { x:  1, y:  1, z: -1 },
-  { x: -1, y:  1, z: -1 },
-  { x: -1, y: -1, z:  1 },
-  { x:  1, y: -1, z:  1 },
-  { x:  1, y:  1, z:  1 },
-  { x: -1, y:  1, z:  1 },
-];
-
-const cubeEdges: Edge[] = [
-  { from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }, { from: 3, to: 0 },
-  { from: 4, to: 5 }, { from: 5, to: 6 }, { from: 6, to: 7 }, { from: 7, to: 4 },
-  { from: 0, to: 4 }, { from: 1, to: 5 }, { from: 2, to: 6 }, { from: 3, to: 7 },
-];
-
-const cubeFaces = [
-  { verts: [0, 1, 2, 3], color: 'indigo' as const },
-  { verts: [4, 5, 6, 7], color: 'pink' as const },
-  { verts: [0, 1, 5, 4], color: 'purple' as const },
-  { verts: [2, 3, 7, 6], color: 'indigo' as const },
-  { verts: [0, 3, 7, 4], color: 'pink' as const },
-  { verts: [1, 2, 6, 5], color: 'purple' as const },
-];
-
-const innerVertices: Point3D[] = [
-  { x:  0,   y: -0.7, z:  0   },
-  { x:  0.5, y:  0,   z:  0.3 },
-  { x: -0.3, y:  0.2, z:  0.5 },
-  { x:  0.2, y:  0.6, z: -0.2 },
-  { x: -0.5, y: -0.1, z: -0.4 },
-  { x:  0.1, y:  0.1, z: -0.6 },
-];
-
-const innerFaces = [
-  [0, 1, 2], [0, 1, 5], [0, 2, 4], [0, 4, 5],
-  [3, 1, 2], [3, 1, 5], [3, 2, 4], [3, 4, 5],
-];
-
-function RotatingCube({ isDark }: { isDark: boolean }) {
+function RotatingTorus({ isDark }: { isDark: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const timeRef = useRef(0);
@@ -95,208 +50,148 @@ function RotatingCube({ isDark }: { isDark: boolean }) {
 
       const cx = w * 0.5;
       const cy = h * 0.48;
-      const cubeSize = Math.min(w, h) * 0.28;
-      const fov = 400;
+      const baseSize = Math.min(w, h) * 0.35;
+      const fov = 500;
 
-      const glowRadius = cubeSize * 2.2;
-      const glow = ctx.createRadialGradient(cx, cy, cubeSize * 0.3, cx, cy, glowRadius);
+      const R = baseSize * 0.7;
+      const r = baseSize * 0.28;
+
+      const glowRadius = baseSize * 2.0;
+      const glow = ctx.createRadialGradient(cx, cy, baseSize * 0.2, cx, cy, glowRadius);
       if (isDark) {
-        glow.addColorStop(0, 'rgba(99, 102, 241, 0.15)');
-        glow.addColorStop(0.3, 'rgba(168, 85, 247, 0.10)');
-        glow.addColorStop(0.6, 'rgba(236, 72, 153, 0.05)');
+        glow.addColorStop(0, 'rgba(168, 85, 247, 0.12)');
+        glow.addColorStop(0.3, 'rgba(99, 102, 241, 0.08)');
+        glow.addColorStop(0.6, 'rgba(236, 72, 153, 0.04)');
         glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
       } else {
-        glow.addColorStop(0, 'rgba(99, 102, 241, 0.10)');
-        glow.addColorStop(0.3, 'rgba(168, 85, 247, 0.06)');
-        glow.addColorStop(0.6, 'rgba(236, 72, 153, 0.03)');
+        glow.addColorStop(0, 'rgba(168, 85, 247, 0.08)');
+        glow.addColorStop(0.3, 'rgba(99, 102, 241, 0.05)');
+        glow.addColorStop(0.6, 'rgba(236, 72, 153, 0.025)');
         glow.addColorStop(1, 'rgba(255, 255, 255, 0)');
       }
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, w, h);
 
-      const rx = t * 0.3;
-      const ry = t * 0.5;
-      const rz = t * 0.15;
+      const uSteps = 48;
+      const vSteps = 24;
+      const rx = t * 0.3 + 0.5;
+      const ry = t * 0.2;
+      const rz = t * 0.15 + 0.3;
 
-      const transformed = cubeVertices.map((v) => {
-        let p: Point3D = { x: v.x * cubeSize, y: v.y * cubeSize, z: v.z * cubeSize };
-        p = rotateX(p, rx);
-        p = rotateY(p, ry);
-        p = rotateZ(p, rz);
-        return p;
-      });
+      const points: Point3D[][] = [];
+      const projected2D: { x: number; y: number; scale: number }[][] = [];
 
-      const projected = transformed.map((p) => project(p, cx, cy, fov));
-
-      const innerTransformed = innerVertices.map((v) => {
-        let p: Point3D = { x: v.x * cubeSize, y: v.y * cubeSize, z: v.z * cubeSize };
-        p = rotateX(p, rx);
-        p = rotateY(p, ry);
-        p = rotateZ(p, rz);
-        return p;
-      });
-      const innerProjected = innerTransformed.map((p) => project(p, cx, cy, fov));
-
-      const faceDepths = cubeFaces.map((face, i) => {
-        const avgZ = face.verts.reduce((sum, vi) => sum + transformed[vi].z, 0) / face.verts.length;
-        return { index: i, avgZ };
-      });
-      faceDepths.sort((a, b) => a.avgZ - b.avgZ);
-
-      const faceColors: Record<string, { dark: string; light: string }> = {
-        indigo: { dark: 'rgba(99, 102, 241, 0.08)', light: 'rgba(99, 102, 241, 0.06)' },
-        purple: { dark: 'rgba(168, 85, 247, 0.08)', light: 'rgba(168, 85, 247, 0.06)' },
-        pink: { dark: 'rgba(236, 72, 153, 0.08)', light: 'rgba(236, 72, 153, 0.06)' },
-      };
-
-      faceDepths.forEach(({ index }) => {
-        const face = cubeFaces[index];
-        const pts = face.verts.map((vi) => projected[vi]);
-        ctx.beginPath();
-        ctx.moveTo(pts[0].x, pts[0].y);
-        for (let i = 1; i < pts.length; i++) {
-          ctx.lineTo(pts[i].x, pts[i].y);
+      for (let i = 0; i <= uSteps; i++) {
+        points[i] = [];
+        projected2D[i] = [];
+        const u = (i / uSteps) * Math.PI * 2;
+        for (let j = 0; j <= vSteps; j++) {
+          const v = (j / vSteps) * Math.PI * 2;
+          let p: Point3D = {
+            x: (R + r * Math.cos(v)) * Math.cos(u),
+            y: (R + r * Math.cos(v)) * Math.sin(u),
+            z: r * Math.sin(v),
+          };
+          p = rotateX(p, rx);
+          p = rotateY(p, ry);
+          p = rotateZ(p, rz);
+          points[i][j] = p;
+          projected2D[i][j] = project(p, cx, cy, fov);
         }
+      }
+
+      const quads: { corners3D: Point3D[]; corners2D: { x: number; y: number; scale: number }[]; avgZ: number; uIdx: number; vIdx: number }[] = [];
+      for (let i = 0; i < uSteps; i++) {
+        for (let j = 0; j < vSteps; j++) {
+          const c3 = [points[i][j], points[i+1][j], points[i+1][j+1], points[i][j+1]];
+          const c2 = [projected2D[i][j], projected2D[i+1][j], projected2D[i+1][j+1], projected2D[i][j+1]];
+          const avgZ = (c3[0].z + c3[1].z + c3[2].z + c3[3].z) / 4;
+          quads.push({ corners3D: c3, corners2D: c2, avgZ, uIdx: i, vIdx: j });
+        }
+      }
+      quads.sort((a, b) => a.avgZ - b.avgZ);
+      const maxZ = R + r;
+
+      quads.forEach((quad) => {
+        const { corners2D: c2d, corners3D: c3d, avgZ: aZ, uIdx: ui, vIdx: vi } = quad;
+        const nx = c3d.reduce((s, c) => s + c.x, 0) / 4;
+        const ny = c3d.reduce((s, c) => s + c.y, 0) / 4;
+        const nzVal = c3d.reduce((s, c) => s + c.z, 0) / 4;
+        const len = Math.sqrt(nx*nx + ny*ny + nzVal*nzVal) || 1;
+        const nz = nzVal / len;
+        const depthFactor = (aZ + maxZ) / (2 * maxZ);
+        const uProgress = ui / uSteps;
+        const vProgress = vi / vSteps;
+        const colorPhase = (uProgress * 3 + t * 0.1) % 1;
+
+        let rc: number, gc: number, bc: number;
+        if (colorPhase < 0.33) {
+          const lp = colorPhase / 0.33;
+          rc = 99 + (168-99)*lp; gc = 102 + (85-102)*lp; bc = 241 + (247-241)*lp;
+        } else if (colorPhase < 0.66) {
+          const lp = (colorPhase-0.33) / 0.33;
+          rc = 168 + (236-168)*lp; gc = 85 + (72-85)*lp; bc = 247 + (153-247)*lp;
+        } else {
+          const lp = (colorPhase-0.66) / 0.34;
+          rc = 236 + (99-236)*lp; gc = 72 + (102-72)*lp; bc = 153 + (241-153)*lp;
+        }
+
+        const highlight = Math.pow(Math.max(0, nz), 2);
+        const fresnel = 1.0 - Math.abs(nz);
+        const fresnelBoost = fresnel * 0.3;
+        const lightAngle = t * 0.4;
+        const lx = Math.cos(lightAngle), ly = Math.sin(lightAngle)*0.5, lz = 0.7;
+        const ll = Math.sqrt(lx*lx+ly*ly+lz*lz);
+        const dotL = nx/len*lx/ll + ny/len*ly/ll + nzVal/len*lz/ll;
+        const specular = Math.pow(Math.max(0, dotL), 8) * 0.5;
+        const baseBr = 0.35 + depthFactor*0.35 + highlight*0.3 + fresnelBoost;
+        const finalBr = Math.min(1, baseBr + specular);
+        const gR = Math.min(255, rc*finalBr + specular*200 + vProgress*15);
+        const gG = Math.min(255, gc*finalBr + specular*180 + vProgress*10);
+        const gB = Math.min(255, bc*finalBr + specular*220 + vProgress*12);
+        const alpha = isDark ? 0.6+depthFactor*0.35+highlight*0.05 : 0.5+depthFactor*0.4+highlight*0.1;
+
+        ctx.beginPath();
+        ctx.moveTo(c2d[0].x, c2d[0].y);
+        ctx.lineTo(c2d[1].x, c2d[1].y);
+        ctx.lineTo(c2d[2].x, c2d[2].y);
+        ctx.lineTo(c2d[3].x, c2d[3].y);
         ctx.closePath();
-        const colors = faceColors[face.color];
-        ctx.fillStyle = isDark ? colors.dark : colors.light;
+        ctx.fillStyle = 'rgba('+Math.round(gR)+','+Math.round(gG)+','+Math.round(gB)+','+alpha.toFixed(3)+')';
         ctx.fill();
-      });
-
-      const innerFaceDepths = innerFaces.map((face, i) => {
-        const avgZ = face.reduce((sum, vi) => sum + innerTransformed[vi].z, 0) / face.length;
-        return { index: i, avgZ };
-      });
-      innerFaceDepths.sort((a, b) => a.avgZ - b.avgZ);
-
-      const innerColors = [
-        isDark ? 'rgba(99, 102, 241, 0.35)' : 'rgba(99, 102, 241, 0.25)',
-        isDark ? 'rgba(168, 85, 247, 0.40)' : 'rgba(168, 85, 247, 0.30)',
-        isDark ? 'rgba(236, 72, 153, 0.35)' : 'rgba(236, 72, 153, 0.25)',
-        isDark ? 'rgba(139, 92, 246, 0.30)' : 'rgba(139, 92, 246, 0.20)',
-        isDark ? 'rgba(244, 114, 182, 0.35)' : 'rgba(244, 114, 182, 0.25)',
-        isDark ? 'rgba(129, 140, 248, 0.40)' : 'rgba(129, 140, 248, 0.30)',
-        isDark ? 'rgba(192, 132, 252, 0.30)' : 'rgba(192, 132, 252, 0.20)',
-        isDark ? 'rgba(236, 72, 153, 0.45)' : 'rgba(236, 72, 153, 0.35)',
-      ];
-
-      innerFaceDepths.forEach(({ index }) => {
-        const face = innerFaces[index];
-        const pts = face.map((vi) => innerProjected[vi]);
-        ctx.beginPath();
-        ctx.moveTo(pts[0].x, pts[0].y);
-        for (let i = 1; i < pts.length; i++) {
-          ctx.lineTo(pts[i].x, pts[i].y);
+        if (specular > 0.1) {
+          ctx.fillStyle = 'rgba(255,255,255,'+( specular*(isDark?0.3:0.4) ).toFixed(3)+')';
+          ctx.fill();
         }
-        ctx.closePath();
-        ctx.fillStyle = innerColors[index % innerColors.length];
-        ctx.fill();
-        ctx.strokeStyle = isDark ? 'rgba(168, 85, 247, 0.15)' : 'rgba(168, 85, 247, 0.10)';
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
       });
 
-      cubeEdges.forEach((edge) => {
-        const p1 = projected[edge.from];
-        const p2 = projected[edge.to];
-        const z1 = transformed[edge.from].z;
-        const z2 = transformed[edge.to].z;
-        const avgZ = (z1 + z2) / 2;
-        const depthFactor = 0.3 + 0.7 * ((avgZ + cubeSize) / (2 * cubeSize));
-
+      for (let i = 0; i < 30; i++) {
+        const angle = t*0.15 + i*(Math.PI*2/30);
+        const pR = baseSize*(1.3+Math.sin(t*0.4+i*0.9)*0.3);
+        const yOff = Math.sin(t*0.25+i*1.5)*baseSize*0.6;
+        const px = cx+Math.cos(angle)*pR;
+        const py = cy+yOff;
+        const ps = 1.0+Math.sin(t*0.7+i)*0.5;
+        const pAlpha = 0.12+Math.sin(t+i*0.5)*0.08;
         ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.strokeStyle = isDark
-          ? `rgba(168, 85, 247, ${0.06 * depthFactor})`
-          : `rgba(168, 85, 247, ${0.04 * depthFactor})`;
-        ctx.lineWidth = 6;
-        ctx.stroke();
-
-        const edgeGrad = ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
-        if (isDark) {
-          edgeGrad.addColorStop(0, `rgba(99, 102, 241, ${0.6 * depthFactor})`);
-          edgeGrad.addColorStop(0.5, `rgba(168, 85, 247, ${0.7 * depthFactor})`);
-          edgeGrad.addColorStop(1, `rgba(236, 72, 153, ${0.6 * depthFactor})`);
-        } else {
-          edgeGrad.addColorStop(0, `rgba(99, 102, 241, ${0.5 * depthFactor})`);
-          edgeGrad.addColorStop(0.5, `rgba(168, 85, 247, ${0.6 * depthFactor})`);
-          edgeGrad.addColorStop(1, `rgba(236, 72, 153, ${0.5 * depthFactor})`);
-        }
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.strokeStyle = edgeGrad;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      });
-
-      projected.forEach((p, i) => {
-        const z = transformed[i].z;
-        const brightness = 0.4 + 0.6 * ((z + cubeSize) / (2 * cubeSize));
-        const radius = 2.5 * p.scale;
-
-        const pointGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, radius * 4);
-        if (isDark) {
-          pointGlow.addColorStop(0, `rgba(168, 85, 247, ${0.3 * brightness})`);
-          pointGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        } else {
-          pointGlow.addColorStop(0, `rgba(168, 85, 247, ${0.2 * brightness})`);
-          pointGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        }
-        ctx.fillStyle = pointGlow;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, radius * 4, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = isDark
-          ? `rgba(255, 255, 255, ${0.7 * brightness})`
-          : `rgba(139, 92, 246, ${0.6 * brightness})`;
-        ctx.fill();
-      });
-
-      for (let i = 0; i < 25; i++) {
-        const angle = t * 0.2 + i * (Math.PI * 2 / 25);
-        const r = cubeSize * (1.6 + Math.sin(t * 0.5 + i * 0.7) * 0.4);
-        const yOff = Math.sin(t * 0.3 + i * 1.3) * cubeSize * 0.8;
-        const px = cx + Math.cos(angle) * r;
-        const py = cy + yOff;
-        const ps = 1 + Math.sin(t * 0.8 + i) * 0.5;
-        const alpha = 0.15 + Math.sin(t + i * 0.5) * 0.1;
-
-        ctx.beginPath();
-        ctx.arc(px, py, ps, 0, Math.PI * 2);
-        if (i % 3 === 0) {
-          ctx.fillStyle = isDark ? `rgba(99, 102, 241, ${alpha})` : `rgba(99, 102, 241, ${alpha * 0.7})`;
-        } else if (i % 3 === 1) {
-          ctx.fillStyle = isDark ? `rgba(168, 85, 247, ${alpha})` : `rgba(168, 85, 247, ${alpha * 0.7})`;
-        } else {
-          ctx.fillStyle = isDark ? `rgba(236, 72, 153, ${alpha})` : `rgba(236, 72, 153, ${alpha * 0.7})`;
-        }
+        ctx.arc(px, py, ps, 0, Math.PI*2);
+        if (i%3===0) ctx.fillStyle = isDark ? 'rgba(99,102,241,'+pAlpha+')' : 'rgba(99,102,241,'+(pAlpha*0.7)+')';
+        else if (i%3===1) ctx.fillStyle = isDark ? 'rgba(168,85,247,'+pAlpha+')' : 'rgba(168,85,247,'+(pAlpha*0.7)+')';
+        else ctx.fillStyle = isDark ? 'rgba(236,72,153,'+pAlpha+')' : 'rgba(236,72,153,'+(pAlpha*0.7)+')';
         ctx.fill();
       }
 
-      const streakAngle = t * 0.4;
-      for (let i = 0; i < 3; i++) {
-        const sa = streakAngle + i * (Math.PI * 2 / 3);
-        const sx = cx + Math.cos(sa) * cubeSize * 0.3;
-        const sy = cy + Math.sin(sa) * cubeSize * 0.3;
-        const ex = cx + Math.cos(sa + 0.3) * cubeSize * 0.6;
-        const ey = cy + Math.sin(sa + 0.3) * cubeSize * 0.6;
-
-        const streakGrad = ctx.createLinearGradient(sx, sy, ex, ey);
-        streakGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-        streakGrad.addColorStop(0.5, isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.06)');
-        streakGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-        ctx.beginPath();
-        ctx.moveTo(sx, sy);
-        ctx.lineTo(ex, ey);
-        ctx.strokeStyle = streakGrad;
-        ctx.lineWidth = 2;
-        ctx.stroke();
+      for (let i = 0; i < 4; i++) {
+        const sa = t*0.3 + i*(Math.PI/2);
+        const sR = baseSize*0.5;
+        const sx = cx+Math.cos(sa)*sR, sy = cy+Math.sin(sa)*sR*0.6;
+        const ex = cx+Math.cos(sa+0.5)*sR*1.4, ey = cy+Math.sin(sa+0.5)*sR*0.8;
+        const sg = ctx.createLinearGradient(sx,sy,ex,ey);
+        sg.addColorStop(0, 'rgba(255,255,255,0)');
+        sg.addColorStop(0.5, isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.05)');
+        sg.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,ey);
+        ctx.strokeStyle = sg; ctx.lineWidth = 1.5; ctx.stroke();
       }
     },
     [isDark]
@@ -307,7 +202,6 @@ function RotatingCube({ isDark }: { isDark: boolean }) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
@@ -317,7 +211,6 @@ function RotatingCube({ isDark }: { isDark: boolean }) {
     };
     resize();
     window.addEventListener('resize', resize);
-
     const animate = () => {
       timeRef.current += 0.016;
       const rect = canvas.getBoundingClientRect();
@@ -325,7 +218,6 @@ function RotatingCube({ isDark }: { isDark: boolean }) {
       animRef.current = requestAnimationFrame(animate);
     };
     animate();
-
     return () => {
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animRef.current);
@@ -596,7 +488,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.3 }}
             className="relative w-full aspect-square max-w-[480px] mx-auto lg:mx-0"
           >
-            <RotatingCube isDark={isDark} />
+            <RotatingTorus isDark={isDark} />
           </motion.div>
         </div>
       </div>
