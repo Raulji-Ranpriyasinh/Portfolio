@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'motion/react';
 import { useRef } from 'react';
-import { Brain, Code2, BarChart3, Lightbulb } from 'lucide-react';
+import { Brain, Code2, BarChart3, Lightbulb, User } from 'lucide-react';
 
 const stats = [
   { number: '20+', label: 'Projects Delivered' },
@@ -54,7 +54,10 @@ export function About() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4 block">About</span>
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+            <User size={12} className="text-indigo-400" />
+            About
+          </span>
           <h2 className="text-3xl md:text-5xl font-bold leading-tight max-w-2xl">
             Building at the{' '}
             <span className="gradient-text">intersection of AI & product</span>.

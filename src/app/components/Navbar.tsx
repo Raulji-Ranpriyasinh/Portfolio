@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Home, User, Wrench, Briefcase, FolderOpen, Send } from 'lucide-react';
 
 const navItems = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Home', href: '#home', icon: Home },
+  { name: 'About', href: '#about', icon: User },
+  { name: 'Skills', href: '#skills', icon: Wrench },
+  { name: 'Experience', href: '#experience', icon: Briefcase },
+  { name: 'Projects', href: '#projects', icon: FolderOpen },
+  { name: 'Contact', href: '#contact', icon: Send },
 ];
 
 export function Navbar() {
@@ -87,7 +87,10 @@ export function Navbar() {
                     : 'text-white/40 hover:text-white/70'
                 }`}
               >
-                {item.name}
+                <span className="relative z-10 inline-flex items-center gap-1.5">
+                  <item.icon size={14} className="opacity-60" />
+                  {item.name}
+                </span>
                 {activeSection === item.href.slice(1) && (
                   <motion.div
                     layoutId="activeNav"
@@ -129,12 +132,13 @@ export function Navbar() {
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className={`block w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all duration-300 ${
+                className={`flex items-center gap-2 w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all duration-300 ${
                   activeSection === item.href.slice(1)
                     ? 'bg-white/10 text-white'
                     : 'text-white/40 hover:text-white/70 hover:bg-white/5'
                 }`}
               >
+                <item.icon size={14} className="opacity-60" />
                 {item.name}
               </button>
             ))}
