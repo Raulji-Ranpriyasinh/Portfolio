@@ -2,10 +2,11 @@ import { motion } from 'motion/react';
 import { useInView } from 'motion/react';
 import { useRef, useState, useEffect } from 'react';
 import { ArrowUpRight, Mail, Github, Linkedin, Send } from 'lucide-react';
+import { useTheme } from './ThemeContext';
 
 const terminalLines = [
   { prompt: true, text: 'fetch_contact_info.sh' },
-  { prompt: false, text: '✓ Access Granted', color: '#a5d6a7' },
+  { prompt: false, text: 'Access Granted', color: '#a5d6a7' },
   { prompt: false, text: '' },
   { prompt: false, text: '{' },
   { prompt: false, text: '  "status": "available",' },
@@ -40,6 +41,7 @@ export function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [terminalVisible, setTerminalVisible] = useState(0);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     if (!isInView) return;
@@ -53,10 +55,8 @@ export function Contact() {
 
   return (
     <section id="contact" className="py-24 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-      {/* Ambient glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-indigo-500/5 blur-[120px]" />
+      <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent ${isDark ? 'via-white/10' : 'via-black/10'} to-transparent`} />
+      <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full blur-[120px] ${isDark ? 'bg-indigo-500/5' : 'bg-indigo-500/3'}`} />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
         <motion.div
@@ -66,15 +66,15 @@ export function Contact() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs uppercase tracking-[0.2em] mb-4 ${
+            isDark ? 'border-white/10 bg-white/[0.03] text-white/40' : 'border-black/10 bg-black/[0.03] text-gray-500'
+          }`}>
             <Send size={12} className="text-indigo-400" />
             Contact
           </span>
         </motion.div>
 
-        {/* Two-column layout: headline + terminal | contact links */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Left - headline + terminal */}
           <div>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -82,25 +82,28 @@ export function Contact() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="mb-8"
             >
-              <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-4">
+              <h2 className={`text-4xl md:text-5xl font-bold leading-tight mb-4 ${isDark ? '' : 'text-gray-900'}`}>
                 Have a project in mind?
                 <br />
                 <span className="gradient-text">Let's build it together.</span>
               </h2>
-              <p className="text-white/40 text-base">
-                I'm always open to freelance projects, consulting, and collaborations in AI/ML, 
+              <p className={isDark ? 'text-white/40 text-base' : 'text-gray-500 text-base'}>
+                I'm always open to freelance projects, consulting, and collaborations in AI/ML,
                 full-stack development, and data science.
               </p>
             </motion.div>
 
-            {/* Terminal widget */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="rounded-xl border border-white/[0.08] bg-[#1a1a2e]/80 backdrop-blur-xl overflow-hidden"
+              className={`rounded-xl border backdrop-blur-xl overflow-hidden ${
+                isDark ? 'border-white/[0.08] bg-[#1a1a2e]/80' : 'border-gray-200 bg-gray-900'
+              }`}
             >
-              <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.06] bg-white/[0.02]">
+              <div className={`flex items-center gap-2 px-4 py-2.5 border-b ${
+                isDark ? 'border-white/[0.06] bg-white/[0.02]' : 'border-gray-700 bg-gray-800'
+              }`}>
                 <div className="flex gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
                   <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
@@ -118,7 +121,7 @@ export function Contact() {
                   >
                     {line.prompt ? (
                       <span>
-                        <span className="text-purple-400">❯</span>
+                        <span className="text-purple-400">{'>'}</span>
                         <span className="text-white/50"> ~ </span>
                         <span className="text-white/70">{line.text}</span>
                       </span>
@@ -131,16 +134,15 @@ export function Contact() {
                 ))}
                 {terminalVisible >= terminalLines.length && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                    <span className="text-purple-400">❯</span>
+                    <span className="text-purple-400">{'>'}</span>
                     <span className="text-white/50"> ~ </span>
-                    <span className="text-indigo-400 animate-blink">█</span>
+                    <span className="text-indigo-400 animate-blink">{'|'}</span>
                   </motion.div>
                 )}
               </div>
             </motion.div>
           </div>
 
-          {/* Right - Contact links */}
           <div className="space-y-3 flex flex-col justify-center">
             {links.map((link, index) => (
               <motion.a
@@ -151,18 +153,22 @@ export function Contact() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                className="group flex items-center justify-between p-6 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-500"
+                className={`group flex items-center justify-between p-6 rounded-2xl border transition-all duration-500 ${
+                  isDark
+                    ? 'border-white/10 bg-white/[0.02] hover:bg-white/[0.05]'
+                    : 'border-gray-200 bg-white hover:bg-gray-50'
+                }`}
               >
                 <div className="flex items-center gap-4">
-                  <link.icon size={20} className="text-white/30 group-hover:text-white/60 transition-colors duration-300" />
+                  <link.icon size={20} className={`${isDark ? 'text-white/30 group-hover:text-white/60' : 'text-gray-400 group-hover:text-gray-600'} transition-colors duration-300`} />
                   <div>
-                    <span className="text-xs text-white/30 uppercase tracking-wider block">{link.label}</span>
-                    <span className="text-white/80 font-medium group-hover:text-white transition-colors duration-300">{link.value}</span>
+                    <span className={`text-xs uppercase tracking-wider block ${isDark ? 'text-white/30' : 'text-gray-400'}`}>{link.label}</span>
+                    <span className={`font-medium transition-colors duration-300 ${isDark ? 'text-white/80 group-hover:text-white' : 'text-gray-700 group-hover:text-gray-900'}`}>{link.value}</span>
                   </div>
                 </div>
                 <ArrowUpRight
                   size={20}
-                  className="text-white/15 group-hover:text-white/50 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300"
+                  className={`${isDark ? 'text-white/15 group-hover:text-white/50' : 'text-gray-200 group-hover:text-gray-500'} group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300`}
                 />
               </motion.a>
             ))}

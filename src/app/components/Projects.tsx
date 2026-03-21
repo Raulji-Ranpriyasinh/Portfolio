@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useInView } from 'motion/react';
 import { useRef } from 'react';
 import { ArrowUpRight, Github, FolderOpen } from 'lucide-react';
+import { useTheme } from './ThemeContext';
 
 const projects = [
   {
@@ -73,13 +74,14 @@ const projects = [
 export function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { isDark } = useTheme();
 
   const featuredProjects = projects.filter((p) => p.featured);
   const otherProjects = projects.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="py-24 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent ${isDark ? 'via-white/10' : 'via-black/10'} to-transparent`} />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <motion.div
@@ -89,17 +91,18 @@ export function Projects() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs uppercase tracking-[0.2em] mb-4 ${
+            isDark ? 'border-white/10 bg-white/[0.03] text-white/40' : 'border-black/10 bg-black/[0.03] text-gray-500'
+          }`}>
             <FolderOpen size={12} className="text-indigo-400" />
             Selected Work
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold">
+          <h2 className={`text-3xl md:text-5xl font-bold ${isDark ? '' : 'text-gray-900'}`}>
             Things I've{' '}
             <span className="gradient-text">built</span>.
           </h2>
         </motion.div>
 
-        {/* Featured - bento grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           {featuredProjects.map((project, index) => (
             <motion.a
@@ -110,30 +113,32 @@ export function Projects() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 + index * 0.1 }}
-              className={`group relative p-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.15] transition-all duration-500 cursor-pointer overflow-hidden ${
-                index === 0 ? 'md:col-span-2' : ''
-              }`}
+              className={`group relative p-8 rounded-2xl border transition-all duration-500 cursor-pointer overflow-hidden ${
+                isDark
+                  ? 'border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.15]'
+                  : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
+              } ${index === 0 ? 'md:col-span-2' : ''}`}
             >
-              {/* Subtle top accent line */}
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <span className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 shrink-0" />
-                  <span className="text-xs text-white/30 uppercase tracking-wider font-medium">{project.subtitle}</span>
+                  <span className={`text-xs uppercase tracking-wider font-medium ${isDark ? 'text-white/30' : 'text-gray-400'}`}>{project.subtitle}</span>
                 </div>
                 <ArrowUpRight
                   size={20}
-                  className="text-white/20 group-hover:text-white/60 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300"
+                  className={`${isDark ? 'text-white/20 group-hover:text-white/60' : 'text-gray-300 group-hover:text-gray-500'} group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300`}
                 />
               </div>
-              <h3 className="text-2xl font-bold text-white/90 mb-3">{project.title}</h3>
-              <p className="text-sm text-white/40 leading-relaxed mb-6">{project.description}</p>
+              <h3 className={`text-2xl font-bold mb-3 ${isDark ? 'text-white/90' : 'text-gray-800'}`}>{project.title}</h3>
+              <p className={`text-sm leading-relaxed mb-6 ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{project.description}</p>
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2.5 py-1 text-xs rounded-full border border-white/10 text-white/40 bg-white/[0.02]"
+                    className={`px-2.5 py-1 text-xs rounded-full border ${
+                      isDark ? 'border-white/10 text-white/40 bg-white/[0.02]' : 'border-gray-200 text-gray-500 bg-gray-50'
+                    }`}
                   >
                     {tag}
                   </span>
@@ -143,7 +148,6 @@ export function Projects() {
           ))}
         </div>
 
-        {/* Other projects - compact grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {otherProjects.map((project, index) => (
             <motion.a
@@ -154,25 +158,31 @@ export function Projects() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.3 + index * 0.08 }}
-              className="group relative p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.15] transition-all duration-500 cursor-pointer overflow-hidden"
+              className={`group relative p-6 rounded-2xl border transition-all duration-500 cursor-pointer overflow-hidden ${
+                isDark
+                  ? 'border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.15]'
+                  : 'border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300'
+              }`}
             >
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <span className="text-xs text-white/30 uppercase tracking-wider font-medium">{project.subtitle}</span>
-                  <h3 className="text-lg font-semibold text-white/80 mt-1">{project.title}</h3>
+                  <span className={`text-xs uppercase tracking-wider font-medium ${isDark ? 'text-white/30' : 'text-gray-400'}`}>{project.subtitle}</span>
+                  <h3 className={`text-lg font-semibold mt-1 ${isDark ? 'text-white/80' : 'text-gray-800'}`}>{project.title}</h3>
                 </div>
                 <ArrowUpRight
                   size={16}
-                  className="text-white/15 group-hover:text-white/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
+                  className={`${isDark ? 'text-white/15 group-hover:text-white/50' : 'text-gray-200 group-hover:text-gray-500'} group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300`}
                 />
               </div>
-              <p className="text-xs text-white/35 leading-relaxed mb-4">{project.description}</p>
+              <p className={`text-xs leading-relaxed mb-4 ${isDark ? 'text-white/35' : 'text-gray-400'}`}>{project.description}</p>
               <div className="flex flex-wrap gap-1.5">
                 {project.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
-                    className="px-2 py-0.5 text-xs rounded-full border border-white/[0.08] text-white/30 bg-white/[0.02]"
+                    className={`px-2 py-0.5 text-xs rounded-full border ${
+                      isDark ? 'border-white/[0.08] text-white/30 bg-white/[0.02]' : 'border-gray-200 text-gray-400 bg-gray-50'
+                    }`}
                   >
                     {tag}
                   </span>
@@ -182,7 +192,6 @@ export function Projects() {
           ))}
         </div>
 
-        {/* GitHub CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -195,7 +204,11 @@ export function Projects() {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/15 text-white/60 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300 text-sm font-medium"
+            className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg border text-sm font-medium transition-all duration-300 ${
+              isDark
+                ? 'border-white/15 text-white/60 hover:text-white hover:border-white/30 hover:bg-white/5'
+                : 'border-gray-300 text-gray-500 hover:text-gray-800 hover:border-gray-400 hover:bg-gray-50'
+            }`}
           >
             <Github size={18} />
             View all on GitHub

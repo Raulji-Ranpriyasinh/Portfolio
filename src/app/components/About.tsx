@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useInView } from 'motion/react';
 import { useRef } from 'react';
 import { Brain, Code2, BarChart3, Lightbulb, User } from 'lucide-react';
+import { useTheme } from './ThemeContext';
 
 const stats = [
   { number: '20+', label: 'Projects Delivered' },
@@ -40,13 +41,13 @@ const services = [
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { isDark } = useTheme();
 
   return (
     <section id="about" className="py-24 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent ${isDark ? 'via-white/10' : 'via-black/10'} to-transparent`} />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        {/* Section header */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
@@ -54,65 +55,67 @@ export function About() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
+          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs uppercase tracking-[0.2em] mb-4 ${
+            isDark ? 'border-white/10 bg-white/[0.03] text-white/40' : 'border-black/10 bg-black/[0.03] text-gray-500'
+          }`}>
             <User size={12} className="text-indigo-400" />
             About
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold leading-tight max-w-2xl">
+          <h2 className={`text-3xl md:text-5xl font-bold leading-tight max-w-2xl ${isDark ? '' : 'text-gray-900'}`}>
             Building at the{' '}
             <span className="gradient-text">intersection of AI & product</span>.
           </h2>
         </motion.div>
 
-        {/* Bento grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
-          {/* Bio card - spans 2 cols */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="md:col-span-2 lg:col-span-2 p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500"
+            className={`md:col-span-2 lg:col-span-2 p-8 rounded-2xl border transition-colors duration-500 ${
+              isDark ? 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04]' : 'border-gray-200 bg-white hover:bg-gray-50'
+            }`}
           >
-            <p className="text-white/50 leading-relaxed mb-4">
-              As an independent AI/ML Engineer and Full-Stack Developer, I've spent the last 3+ years 
+            <p className={`leading-relaxed mb-4 ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+              As an independent AI/ML Engineer and Full-Stack Developer, I've spent the last 3+ years
               turning complex challenges into production-ready products. From designing{' '}
-              <span className="text-white/80">LLM-powered agents</span> and{' '}
-              <span className="text-white/80">RAG documentation assistants</span> to building{' '}
-              <span className="text-white/80">full-stack web applications</span>, I bring both technical depth 
+              <span className={isDark ? 'text-white/80' : 'text-gray-800'}>LLM-powered agents</span> and{' '}
+              <span className={isDark ? 'text-white/80' : 'text-gray-800'}>RAG documentation assistants</span> to building{' '}
+              <span className={isDark ? 'text-white/80' : 'text-gray-800'}>full-stack web applications</span>, I bring both technical depth
               and product thinking to every engagement.
             </p>
-            <p className="text-white/50 leading-relaxed">
-              I specialize in <span className="text-white/80">LangChain</span>,{' '}
-              <span className="text-white/80">CrewAI agents</span>,{' '}
-              <span className="text-white/80">vector databases</span>, and{' '}
-              <span className="text-white/80">Python/React stacks</span> — 
+            <p className={`leading-relaxed ${isDark ? 'text-white/50' : 'text-gray-500'}`}>
+              I specialize in <span className={isDark ? 'text-white/80' : 'text-gray-800'}>LangChain</span>,{' '}
+              <span className={isDark ? 'text-white/80' : 'text-gray-800'}>CrewAI agents</span>,{' '}
+              <span className={isDark ? 'text-white/80' : 'text-gray-800'}>vector databases</span>, and{' '}
+              <span className={isDark ? 'text-white/80' : 'text-gray-800'}>Python/React stacks</span> —
               building systems that are not just smart, but reliable and maintainable.
             </p>
           </motion.div>
 
-          {/* Stats cards */}
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + index * 0.05 }}
-              className="p-6 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 flex flex-col justify-center"
+              className={`p-6 rounded-2xl border transition-colors duration-500 flex flex-col justify-center ${
+                isDark ? 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04]' : 'border-gray-200 bg-white hover:bg-gray-50'
+              }`}
             >
               <div className="text-3xl md:text-4xl font-bold gradient-text mb-1">{stat.number}</div>
-              <div className="text-xs text-white/30 uppercase tracking-wider">{stat.label}</div>
+              <div className={`text-xs uppercase tracking-wider ${isDark ? 'text-white/30' : 'text-gray-400'}`}>{stat.label}</div>
             </motion.div>
           ))}
         </div>
 
-        {/* Services */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mb-6"
         >
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-6 block">What I do</span>
+          <span className={`text-xs uppercase tracking-[0.3em] mb-6 block ${isDark ? 'text-white/30' : 'text-gray-400'}`}>What I do</span>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -122,7 +125,9 @@ export function About() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.35 + index * 0.08 }}
-              className="group p-6 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-500"
+              className={`group p-6 rounded-2xl border transition-all duration-500 ${
+                isDark ? 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04]' : 'border-gray-200 bg-white hover:bg-gray-50'
+              }`}
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${service.accent} flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity duration-500`}>
@@ -130,8 +135,8 @@ export function About() {
                 </div>
                 <div className={`w-8 h-1 rounded-full bg-gradient-to-r ${service.accent} group-hover:w-12 transition-all duration-500`} />
               </div>
-              <h3 className="text-lg font-semibold text-white/90 mb-2">{service.title}</h3>
-              <p className="text-sm text-white/40 leading-relaxed">{service.description}</p>
+              <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white/90' : 'text-gray-800'}`}>{service.title}</h3>
+              <p className={`text-sm leading-relaxed ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{service.description}</p>
             </motion.div>
           ))}
         </div>

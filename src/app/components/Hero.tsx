@@ -1,20 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
-import { NeuralNetworkBg } from './NeuralNetworkBg';
-
-const codeLines = [
-  { indent: 0, tokens: [{ text: 'class', color: '#c792ea' }, { text: ' ', color: '' }, { text: 'AIEngineer', color: '#ffcb6b' }, { text: ':', color: '#89ddff' }] },
-  { indent: 1, tokens: [{ text: 'skills', color: '#f78c6c' }, { text: ' = ', color: '#89ddff' }, { text: '[', color: '#89ddff' }] },
-  { indent: 2, tokens: [{ text: '"LangChain"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }, { text: ' "RAG"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }] },
-  { indent: 2, tokens: [{ text: '"CrewAI"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }, { text: ' "PyTorch"', color: '#c3e88d' }] },
-  { indent: 1, tokens: [{ text: ']', color: '#89ddff' }] },
-  { indent: 0, tokens: [] },
-  { indent: 1, tokens: [{ text: 'def', color: '#c792ea' }, { text: ' ', color: '' }, { text: 'build', color: '#82aaff' }, { text: '(', color: '#89ddff' }, { text: 'self', color: '#f78c6c' }, { text: ', ', color: '#89ddff' }, { text: 'vision', color: '#f78c6c' }, { text: '):', color: '#89ddff' }] },
-  { indent: 2, tokens: [{ text: 'return', color: '#c792ea' }, { text: ' self.', color: '#eeffff' }, { text: 'deploy', color: '#82aaff' }, { text: '(', color: '#89ddff' }] },
-  { indent: 3, tokens: [{ text: 'self.', color: '#eeffff' }, { text: 'train', color: '#82aaff' }, { text: '(vision)', color: '#89ddff' }] },
-  { indent: 2, tokens: [{ text: ')', color: '#89ddff' }] },
-];
+import { useTheme } from './ThemeContext';
 
 const roles = [
   'AI/ML Engineer',
@@ -23,11 +10,192 @@ const roles = [
   'Freelancer',
 ];
 
+function AnimatedFigure({ isDark }: { isDark: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animRef = useRef<number>(0);
+  const timeRef = useRef(0);
+
+  const draw = useCallback(
+    (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => {
+      ctx.clearRect(0, 0, w, h);
+
+      const cx = w * 0.5;
+      const cy = h * 0.52;
+      const glowRadius = Math.min(w, h) * 0.42;
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowRadius);
+      if (isDark) {
+        glow.addColorStop(0, 'rgba(168, 85, 247, 0.18)');
+        glow.addColorStop(0.4, 'rgba(236, 72, 153, 0.10)');
+        glow.addColorStop(1, 'rgba(0,0,0,0)');
+      } else {
+        glow.addColorStop(0, 'rgba(168, 85, 247, 0.12)');
+        glow.addColorStop(0.4, 'rgba(236, 72, 153, 0.06)');
+        glow.addColorStop(1, 'rgba(255,255,255,0)');
+      }
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, h);
+
+      const figScale = Math.min(w, h) * 0.0028;
+      const figX = cx;
+      const figY = cy + 20 + Math.sin(t * 0.8) * 6;
+
+      ctx.save();
+      ctx.translate(figX, figY);
+      ctx.scale(figScale, figScale);
+
+      ctx.beginPath();
+      ctx.arc(0, -75, 18, 0, Math.PI * 2);
+      const headGrad = ctx.createRadialGradient(0, -75, 0, 0, -75, 18);
+      if (isDark) {
+        headGrad.addColorStop(0, 'rgba(200, 180, 220, 0.9)');
+        headGrad.addColorStop(1, 'rgba(139, 92, 246, 0.7)');
+      } else {
+        headGrad.addColorStop(0, 'rgba(120, 80, 180, 0.85)');
+        headGrad.addColorStop(1, 'rgba(99, 60, 160, 0.65)');
+      }
+      ctx.fillStyle = headGrad;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(-22, -55);
+      ctx.quadraticCurveTo(-28, 0, -20, 60);
+      ctx.lineTo(20, 60);
+      ctx.quadraticCurveTo(28, 0, 22, -55);
+      ctx.closePath();
+      const bodyGrad = ctx.createLinearGradient(0, -55, 0, 60);
+      if (isDark) {
+        bodyGrad.addColorStop(0, 'rgba(139, 92, 246, 0.75)');
+        bodyGrad.addColorStop(1, 'rgba(236, 72, 153, 0.55)');
+      } else {
+        bodyGrad.addColorStop(0, 'rgba(109, 62, 216, 0.7)');
+        bodyGrad.addColorStop(1, 'rgba(206, 52, 133, 0.5)');
+      }
+      ctx.fillStyle = bodyGrad;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(-22, -45);
+      ctx.quadraticCurveTo(-55, -10 + Math.sin(t * 1.2) * 8, -40, 20 + Math.sin(t * 1.2) * 5);
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = isDark ? 'rgba(139, 92, 246, 0.6)' : 'rgba(109, 62, 216, 0.55)';
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(22, -45);
+      ctx.quadraticCurveTo(55, -15 + Math.sin(t * 1.2 + 1) * 8, 42, 15 + Math.sin(t * 1.2 + 1) * 5);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(-8, 60);
+      ctx.lineTo(-15, 110);
+      ctx.lineWidth = 7;
+      ctx.strokeStyle = isDark ? 'rgba(99, 102, 241, 0.5)' : 'rgba(79, 72, 211, 0.45)';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(8, 60);
+      ctx.lineTo(15, 110);
+      ctx.stroke();
+
+      ctx.restore();
+
+      const orbitElements = [
+        { angle: t * 0.5, radius: glowRadius * 0.65, size: 14, color: isDark ? 'rgba(99, 102, 241, 0.8)' : 'rgba(79, 72, 211, 0.7)', label: 'AI' },
+        { angle: t * 0.4 + 2, radius: glowRadius * 0.75, size: 10, color: isDark ? 'rgba(236, 72, 153, 0.7)' : 'rgba(206, 52, 133, 0.6)', label: 'ML' },
+        { angle: t * 0.35 + 4, radius: glowRadius * 0.55, size: 12, color: isDark ? 'rgba(168, 85, 247, 0.75)' : 'rgba(138, 55, 217, 0.65)', label: 'DL' },
+        { angle: t * 0.45 + 1, radius: glowRadius * 0.85, size: 8, color: isDark ? 'rgba(139, 92, 246, 0.6)' : 'rgba(109, 62, 216, 0.5)', label: '' },
+        { angle: t * 0.3 + 5, radius: glowRadius * 0.7, size: 9, color: isDark ? 'rgba(244, 114, 182, 0.6)' : 'rgba(214, 84, 152, 0.5)', label: '' },
+      ];
+
+      orbitElements.forEach((el) => {
+        const ex = cx + Math.cos(el.angle) * el.radius;
+        const ey = cy + Math.sin(el.angle) * el.radius * 0.6;
+
+        const orbGlow = ctx.createRadialGradient(ex, ey, 0, ex, ey, el.size * 3);
+        orbGlow.addColorStop(0, el.color.replace(/[\d.]+\)$/, '0.15)'));
+        orbGlow.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = orbGlow;
+        ctx.beginPath();
+        ctx.arc(ex, ey, el.size * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(ex, ey, el.size, 0, Math.PI * 2);
+        ctx.fillStyle = el.color;
+        ctx.fill();
+
+        if (el.label) {
+          ctx.font = `bold ${el.size * 0.8}px Inter, sans-serif`;
+          ctx.fillStyle = 'rgba(255,255,255,0.9)';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(el.label, ex, ey);
+        }
+      });
+
+      orbitElements.forEach((el) => {
+        const ex = cx + Math.cos(el.angle) * el.radius;
+        const ey = cy + Math.sin(el.angle) * el.radius * 0.6;
+        ctx.beginPath();
+        ctx.moveTo(figX, figY - 30);
+        ctx.lineTo(ex, ey);
+        ctx.strokeStyle = isDark ? 'rgba(139, 92, 246, 0.08)' : 'rgba(109, 62, 216, 0.06)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      for (let i = 0; i < 20; i++) {
+        const px = cx + Math.sin(t * 0.3 + i * 1.7) * glowRadius * 0.9;
+        const py = cy + Math.cos(t * 0.25 + i * 2.1) * glowRadius * 0.7;
+        const ps = 1 + Math.sin(t + i) * 0.5;
+        ctx.beginPath();
+        ctx.arc(px, py, ps, 0, Math.PI * 2);
+        ctx.fillStyle = isDark ? `rgba(168, 85, 247, ${0.15 + Math.sin(t + i) * 0.1})` : `rgba(138, 55, 217, ${0.1 + Math.sin(t + i) * 0.08})`;
+        ctx.fill();
+      }
+    },
+    [isDark]
+  );
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const animate = () => {
+      timeRef.current += 0.016;
+      const rect = canvas.getBoundingClientRect();
+      draw(ctx, rect.width, rect.height, timeRef.current);
+      animRef.current = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animRef.current);
+    };
+  }, [draw]);
+
+  return <canvas ref={canvasRef} className="w-full h-full" />;
+}
+
 export function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [visibleLines, setVisibleLines] = useState(0);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     const currentRole = roles[roleIndex];
@@ -50,16 +218,6 @@ export function Hero() {
     return () => clearTimeout(timeout);
   }, [displayText, isDeleting, roleIndex]);
 
-  // Animate code lines appearing one by one
-  useEffect(() => {
-    if (visibleLines < codeLines.length) {
-      const timer = setTimeout(() => {
-        setVisibleLines((prev) => prev + 1);
-      }, 300 + visibleLines * 150);
-      return () => clearTimeout(timer);
-    }
-  }, [visibleLines]);
-
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -69,26 +227,22 @@ export function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Neural network animation background */}
-      <NeuralNetworkBg />
+      <div className={`absolute inset-0 ${isDark ? 'bg-[#0a0a0a]' : 'bg-[#fafafa]'}`} />
 
-      {/* Ambient gradient orbs */}
-      <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-500/10 blur-[120px]" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-purple-500/8 blur-[100px]" />
-      <div className="absolute top-[40%] left-[30%] w-[300px] h-[300px] rounded-full bg-pink-500/5 blur-[80px]" />
+      <div className={`absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full blur-[120px] ${isDark ? 'bg-indigo-500/10' : 'bg-indigo-500/5'}`} />
+      <div className={`absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[100px] ${isDark ? 'bg-purple-500/8' : 'bg-purple-500/4'}`} />
+      <div className={`absolute top-[30%] right-[20%] w-[400px] h-[400px] rounded-full blur-[100px] ${isDark ? 'bg-pink-500/8' : 'bg-pink-500/4'}`} />
 
-      {/* Grid pattern */}
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundImage: `linear-gradient(${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'} 1px, transparent 1px), linear-gradient(90deg, ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'} 1px, transparent 1px)`,
           backgroundSize: '60px 60px',
         }}
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 py-32 w-full">
-        <div className="grid lg:grid-cols-[1fr_auto] gap-16 items-center">
-          {/* Left content */}
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           <div>
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -96,7 +250,9 @@ export function Hero() {
               transition={{ duration: 0.6 }}
               className="mb-6"
             >
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm text-white/60">
+              <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-sm ${
+                isDark ? 'border-white/10 bg-white/5 text-white/60' : 'border-black/10 bg-black/5 text-gray-500'
+              }`}>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 Available for freelance projects
               </span>
@@ -108,20 +264,20 @@ export function Hero() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-6"
             >
-              <span className="text-white">Ranpriyasinh</span>
+              <span className={isDark ? 'text-white' : 'text-gray-900'}>Ranpriyasinh</span>
               <br />
               <span className="gradient-text">Raulji</span>
-              <span className="text-white/15">.</span>
+              <span className={isDark ? 'text-white/15' : 'text-gray-200'}>.</span>
             </motion.h1>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-xl md:text-2xl text-white/40 mb-8 h-10 font-light"
+              className={`text-xl md:text-2xl mb-8 h-10 font-light ${isDark ? 'text-white/40' : 'text-gray-400'}`}
             >
               {'> '}
-              <span className="text-white/80 font-mono">{displayText}</span>
+              <span className={`font-mono ${isDark ? 'text-white/80' : 'text-gray-700'}`}>{displayText}</span>
               <span className="text-indigo-400 animate-blink font-mono">|</span>
             </motion.div>
 
@@ -129,12 +285,12 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-base md:text-lg text-white/40 max-w-xl leading-relaxed mb-10"
+              className={`text-base md:text-lg max-w-xl leading-relaxed mb-10 ${isDark ? 'text-white/40' : 'text-gray-500'}`}
             >
               I craft{' '}
-              <span className="text-white/70">intelligent AI systems</span>,{' '}
-              <span className="text-white/70">full-stack applications</span>, and{' '}
-              <span className="text-white/70">data-driven solutions</span>{' '}
+              <span className={isDark ? 'text-white/70' : 'text-gray-700'}>intelligent AI systems</span>,{' '}
+              <span className={isDark ? 'text-white/70' : 'text-gray-700'}>full-stack applications</span>, and{' '}
+              <span className={isDark ? 'text-white/70' : 'text-gray-700'}>data-driven solutions</span>{' '}
               that turn complex problems into elegant, production-ready products.
             </motion.p>
 
@@ -148,118 +304,69 @@ export function Hero() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => scrollToSection('#projects')}
-                className="px-6 py-3 bg-white text-[#0a0a0a] rounded-lg font-semibold text-sm hover:bg-white/90 transition-all duration-300"
+                className={`px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-300 ${
+                  isDark
+                    ? 'bg-white text-[#0a0a0a] hover:bg-white/90'
+                    : 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white hover:opacity-90'
+                }`}
               >
                 View my work
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => scrollToSection('#contact')}
-                className="px-6 py-3 border border-white/20 text-white/80 rounded-lg font-semibold text-sm hover:bg-white/5 hover:border-white/30 transition-all duration-300"
+                onClick={() => scrollToSection('#about')}
+                className={`px-6 py-3 border rounded-lg font-semibold text-sm transition-all duration-300 ${
+                  isDark
+                    ? 'border-white/20 text-white/80 hover:bg-white/5 hover:border-white/30'
+                    : 'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400'
+                }`}
               >
-                Let's talk
+                Learn more
               </motion.button>
             </motion.div>
 
-            {/* Social Links */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.8 }}
               className="flex items-center gap-4"
             >
-              <span className="text-xs text-white/20 uppercase tracking-widest mr-2">Find me</span>
-              <motion.a
-                href="https://github.com/Raulji-Ranpriyasinh"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -3 }}
-                className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300"
-              >
-                <Github size={18} />
-              </motion.a>
-              <motion.a
-                href="https://linkedin.com/in/ranpriyasinh-raulji"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -3 }}
-                className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300"
-              >
-                <Linkedin size={18} />
-              </motion.a>
-              <motion.a
-                href="mailto:ranpriyasinhraulji@gmail.com"
-                whileHover={{ y: -3 }}
-                className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300"
-              >
-                <Mail size={18} />
-              </motion.a>
+              <span className={`text-xs uppercase tracking-widest mr-2 ${isDark ? 'text-white/20' : 'text-gray-400'}`}>Find me</span>
+              {[
+                { href: 'https://github.com/Raulji-Ranpriyasinh', icon: Github },
+                { href: 'https://linkedin.com/in/ranpriyasinh-raulji', icon: Linkedin },
+                { href: 'mailto:ranpriyasinhraulji@gmail.com', icon: Mail },
+              ].map((link) => (
+                <motion.a
+                  key={link.href}
+                  href={link.href}
+                  target={link.href.startsWith('mailto') ? undefined : '_blank'}
+                  rel={link.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+                  whileHover={{ y: -3 }}
+                  className={`w-10 h-10 rounded-lg border flex items-center justify-center transition-all duration-300 ${
+                    isDark
+                      ? 'border-white/10 text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5'
+                      : 'border-gray-200 text-gray-400 hover:text-gray-700 hover:border-gray-400 hover:bg-gray-50'
+                  }`}
+                >
+                  <link.icon size={18} />
+                </motion.a>
+              ))}
             </motion.div>
           </div>
 
-          {/* Right - Code Editor Widget */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="hidden lg:block relative w-[340px]"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="relative w-full aspect-square max-w-[480px] mx-auto lg:mx-0"
           >
-            <div className="rounded-xl border border-white/[0.08] bg-[#1a1a2e]/80 backdrop-blur-xl overflow-hidden shadow-2xl shadow-indigo-500/5">
-              {/* Editor title bar */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
-                <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-                </div>
-                <span className="text-[11px] text-white/25 ml-2 font-mono">engineer.py</span>
-              </div>
-
-              {/* Code content */}
-              <div className="p-4 font-mono text-[12px] leading-[1.8] min-h-[260px]">
-                {codeLines.map((line, lineIndex) => (
-                  <motion.div
-                    key={lineIndex}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={lineIndex < visibleLines ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
-                    className="flex"
-                  >
-                    <span className="text-white/15 w-6 text-right mr-3 select-none text-[11px]">{lineIndex + 1}</span>
-                    <span style={{ paddingLeft: `${line.indent * 16}px` }}>
-                      {line.tokens.length === 0 ? (
-                        <span>&nbsp;</span>
-                      ) : (
-                        line.tokens.map((token, tokenIndex) => (
-                          <span key={tokenIndex} style={{ color: token.color || '#eeffff' }}>
-                            {token.text}
-                          </span>
-                        ))
-                      )}
-                    </span>
-                  </motion.div>
-                ))}
-                {visibleLines >= codeLines.length && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex"
-                  >
-                    <span className="text-white/15 w-6 text-right mr-3 select-none text-[11px]">{codeLines.length + 1}</span>
-                    <span className="text-indigo-400 animate-blink">_</span>
-                  </motion.div>
-                )}
-              </div>
-            </div>
-
-            {/* Floating accent behind the editor */}
-            <div className="absolute -inset-4 -z-10 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 blur-xl" />
+            <AnimatedFigure isDark={isDark} />
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -271,7 +378,7 @@ export function Hero() {
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <ArrowDown size={20} className="text-white/20" />
+          <ArrowDown size={20} className={isDark ? 'text-white/20' : 'text-gray-300'} />
         </motion.div>
       </motion.button>
     </section>
