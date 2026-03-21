@@ -8,10 +8,9 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-6">
-            <span className="text-sm font-bold">
-              <span className="gradient-text">R</span>
-              <span className="text-white/70">aulji</span>
-              <span className="text-white/20">.</span>
+            <span className="inline-flex items-center gap-2 text-sm font-bold">
+              <span className="w-6 h-6 rounded-md bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-[10px] tracking-tight">RR</span>
+              <span className="text-white/70">Ranpriyasinh Raulji</span>
             </span>
             <span className="text-xs text-white/20">© {currentYear}</span>
           </div>

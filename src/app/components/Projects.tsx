@@ -97,7 +97,7 @@ export function Projects() {
         </motion.div>
 
         {/* Featured - bento grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           {featuredProjects.map((project, index) => (
             <motion.a
               key={project.title}
@@ -107,26 +107,30 @@ export function Projects() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 + index * 0.1 }}
-              className={`group relative p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-500 cursor-pointer ${
-                index === 0 ? 'md:col-span-2 lg:col-span-2' : ''
+              className={`group relative p-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.15] transition-all duration-500 cursor-pointer overflow-hidden ${
+                index === 0 ? 'md:col-span-2' : ''
               }`}
             >
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <span className="text-xs text-white/30 uppercase tracking-wider">{project.subtitle}</span>
-                  <h3 className="text-2xl font-bold text-white/90 mt-1">{project.title}</h3>
+              {/* Subtle top accent line */}
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 shrink-0" />
+                  <span className="text-xs text-white/30 uppercase tracking-wider font-medium">{project.subtitle}</span>
                 </div>
                 <ArrowUpRight
                   size={20}
                   className="text-white/20 group-hover:text-white/60 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300"
                 />
               </div>
+              <h3 className="text-2xl font-bold text-white/90 mb-3">{project.title}</h3>
               <p className="text-sm text-white/40 leading-relaxed mb-6">{project.description}</p>
               <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2.5 py-1 text-xs rounded-full border border-white/10 text-white/40"
+                    className="px-2.5 py-1 text-xs rounded-full border border-white/10 text-white/40 bg-white/[0.02]"
                   >
                     {tag}
                   </span>
@@ -147,11 +151,12 @@ export function Projects() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.3 + index * 0.08 }}
-              className="group p-6 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-500 cursor-pointer"
+              className="group relative p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.15] transition-all duration-500 cursor-pointer overflow-hidden"
             >
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <span className="text-xs text-white/30 uppercase tracking-wider">{project.subtitle}</span>
+                  <span className="text-xs text-white/30 uppercase tracking-wider font-medium">{project.subtitle}</span>
                   <h3 className="text-lg font-semibold text-white/80 mt-1">{project.title}</h3>
                 </div>
                 <ArrowUpRight
@@ -164,7 +169,7 @@ export function Projects() {
                 {project.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
-                    className="px-2 py-0.5 text-xs rounded-full border border-white/8 text-white/30"
+                    className="px-2 py-0.5 text-xs rounded-full border border-white/[0.08] text-white/30 bg-white/[0.02]"
                   >
                     {tag}
                   </span>

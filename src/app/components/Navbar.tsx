@@ -64,9 +64,10 @@ export function Navbar() {
             onClick={() => scrollToSection('#home')}
             className="text-lg font-bold tracking-tight"
           >
-            <span className="gradient-text">R</span>
-            <span className="text-white/90">aulji</span>
-            <span className="text-white/30 ml-1 font-light">.</span>
+            <span className="inline-flex items-center gap-2">
+              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm tracking-tight">RR</span>
+              <span className="text-white/90 font-semibold tracking-tight">Ranpriyasinh</span>
+            </span>
           </motion.button>
 
           <div className="hidden md:flex items-center gap-1">

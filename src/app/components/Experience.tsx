@@ -65,7 +65,8 @@ export function Experience() {
               transition={{ duration: 0.6, delay: 0.1 + index * 0.15 }}
               className="group"
             >
-              <div className="p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-500">
+              <div className="relative p-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500 overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 {/* Header row */}
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
                   <div>
@@ -112,7 +113,7 @@ export function Experience() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-6 p-6 rounded-2xl border border-white/10 bg-white/[0.02]"
+          className="mt-6 p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500"
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <div>

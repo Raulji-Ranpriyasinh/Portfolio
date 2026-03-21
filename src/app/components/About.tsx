@@ -51,8 +51,8 @@ export function About() {
         >
           <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4 block">About</span>
           <h2 className="text-3xl md:text-5xl font-bold leading-tight max-w-2xl">
-            I build things that live at the{' '}
-            <span className="gradient-text">intersection of AI and product</span>.
+            Building at the{' '}
+            <span className="gradient-text">intersection of AI & product</span>.
           </h2>
         </motion.div>
 
