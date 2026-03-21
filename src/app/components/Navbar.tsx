@@ -64,9 +64,12 @@ export function Navbar() {
             onClick={() => scrollToSection('#home')}
             className="text-lg font-bold tracking-tight"
           >
-            <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-2.5">
               <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm tracking-tight">RR</span>
-              <span className="text-white/90 font-semibold tracking-tight">Ranpriyasinh</span>
+              <span className="hidden sm:inline">
+                <span className="text-white/90 font-semibold tracking-tight">R. Raulji</span>
+                <span className="text-white/20 ml-1.5 text-xs font-normal tracking-wider hidden lg:inline">/ AI Engineer</span>
+              </span>
             </span>
           </motion.button>
 

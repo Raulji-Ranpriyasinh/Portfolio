@@ -1,6 +1,20 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
+import { NeuralNetworkBg } from './NeuralNetworkBg';
+
+const codeLines = [
+  { indent: 0, tokens: [{ text: 'class', color: '#c792ea' }, { text: ' ', color: '' }, { text: 'AIEngineer', color: '#ffcb6b' }, { text: ':', color: '#89ddff' }] },
+  { indent: 1, tokens: [{ text: 'skills', color: '#f78c6c' }, { text: ' = ', color: '#89ddff' }, { text: '[', color: '#89ddff' }] },
+  { indent: 2, tokens: [{ text: '"LangChain"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }, { text: ' "RAG"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }] },
+  { indent: 2, tokens: [{ text: '"CrewAI"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }, { text: ' "PyTorch"', color: '#c3e88d' }] },
+  { indent: 1, tokens: [{ text: ']', color: '#89ddff' }] },
+  { indent: 0, tokens: [] },
+  { indent: 1, tokens: [{ text: 'def', color: '#c792ea' }, { text: ' ', color: '' }, { text: 'build', color: '#82aaff' }, { text: '(', color: '#89ddff' }, { text: 'self', color: '#f78c6c' }, { text: ', ', color: '#89ddff' }, { text: 'vision', color: '#f78c6c' }, { text: '):', color: '#89ddff' }] },
+  { indent: 2, tokens: [{ text: 'return', color: '#c792ea' }, { text: ' self.', color: '#eeffff' }, { text: 'deploy', color: '#82aaff' }, { text: '(', color: '#89ddff' }] },
+  { indent: 3, tokens: [{ text: 'self.', color: '#eeffff' }, { text: 'train', color: '#82aaff' }, { text: '(vision)', color: '#89ddff' }] },
+  { indent: 2, tokens: [{ text: ')', color: '#89ddff' }] },
+];
 
 const roles = [
   'AI/ML Engineer',
@@ -13,6 +27,7 @@ export function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [visibleLines, setVisibleLines] = useState(0);
 
   useEffect(() => {
     const currentRole = roles[roleIndex];
@@ -35,6 +50,16 @@ export function Hero() {
     return () => clearTimeout(timeout);
   }, [displayText, isDeleting, roleIndex]);
 
+  // Animate code lines appearing one by one
+  useEffect(() => {
+    if (visibleLines < codeLines.length) {
+      const timer = setTimeout(() => {
+        setVisibleLines((prev) => prev + 1);
+      }, 300 + visibleLines * 150);
+      return () => clearTimeout(timer);
+    }
+  }, [visibleLines]);
+
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
@@ -44,6 +69,9 @@ export function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Neural network animation background */}
+      <NeuralNetworkBg />
+
       {/* Ambient gradient orbs */}
       <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-500/10 blur-[120px]" />
       <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-purple-500/8 blur-[100px]" />
@@ -170,23 +198,63 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Right - floating decorative elements */}
+          {/* Right - Code Editor Widget */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="hidden lg:block relative w-80 h-80"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="hidden lg:block relative w-[340px]"
           >
-            <div className="absolute inset-0 rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent rotate-6 animate-float" />
-            <div className="absolute inset-4 rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 to-transparent -rotate-3 animate-float-delayed" />
-            <div className="absolute inset-8 rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-transparent rotate-2 animate-float-slow" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-6xl font-bold gradient-text mb-2">3+</div>
-                <div className="text-white/30 text-sm">Years of</div>
-                <div className="text-white/50 text-sm font-medium">Building AI</div>
+            <div className="rounded-xl border border-white/[0.08] bg-[#1a1a2e]/80 backdrop-blur-xl overflow-hidden shadow-2xl shadow-indigo-500/5">
+              {/* Editor title bar */}
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
+                </div>
+                <span className="text-[11px] text-white/25 ml-2 font-mono">engineer.py</span>
+              </div>
+
+              {/* Code content */}
+              <div className="p-4 font-mono text-[12px] leading-[1.8] min-h-[260px]">
+                {codeLines.map((line, lineIndex) => (
+                  <motion.div
+                    key={lineIndex}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={lineIndex < visibleLines ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    className="flex"
+                  >
+                    <span className="text-white/15 w-6 text-right mr-3 select-none text-[11px]">{lineIndex + 1}</span>
+                    <span style={{ paddingLeft: `${line.indent * 16}px` }}>
+                      {line.tokens.length === 0 ? (
+                        <span>&nbsp;</span>
+                      ) : (
+                        line.tokens.map((token, tokenIndex) => (
+                          <span key={tokenIndex} style={{ color: token.color || '#eeffff' }}>
+                            {token.text}
+                          </span>
+                        ))
+                      )}
+                    </span>
+                  </motion.div>
+                ))}
+                {visibleLines >= codeLines.length && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex"
+                  >
+                    <span className="text-white/15 w-6 text-right mr-3 select-none text-[11px]">{codeLines.length + 1}</span>
+                    <span className="text-indigo-400 animate-blink">_</span>
+                  </motion.div>
+                )}
               </div>
             </div>
+
+            {/* Floating accent behind the editor */}
+            <div className="absolute -inset-4 -z-10 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 blur-xl" />
           </motion.div>
         </div>
       </div>

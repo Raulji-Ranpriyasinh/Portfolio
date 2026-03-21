@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useInView } from 'motion/react';
 import { useRef } from 'react';
+import { Brain, Code2, BarChart3, Lightbulb } from 'lucide-react';
 
 const stats = [
   { number: '20+', label: 'Projects Delivered' },
@@ -14,21 +15,25 @@ const services = [
     title: 'Generative AI & LLMs',
     description: 'RAG pipelines, conversational agents, LLM-powered automation workflows, and AI-driven content generation systems.',
     accent: 'from-indigo-500 to-purple-500',
+    icon: Brain,
   },
   {
     title: 'Full-Stack Development',
     description: 'End-to-end web applications with React, Flask, FastAPI, and modern architectures that scale.',
     accent: 'from-purple-500 to-pink-500',
+    icon: Code2,
   },
   {
     title: 'Data Science & ML',
     description: 'Predictive models, sentiment analysis, recommendation engines, and deep learning solutions.',
     accent: 'from-pink-500 to-rose-500',
+    icon: BarChart3,
   },
   {
     title: 'AI Consulting',
     description: 'Strategic guidance on AI integration, architecture design, and intelligent automation for businesses.',
     accent: 'from-rose-500 to-orange-500',
+    icon: Lightbulb,
   },
 ];
 
@@ -116,7 +121,12 @@ export function About() {
               transition={{ duration: 0.6, delay: 0.35 + index * 0.08 }}
               className="group p-6 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-500"
             >
-              <div className={`w-8 h-1 rounded-full bg-gradient-to-r ${service.accent} mb-4 group-hover:w-12 transition-all duration-500`} />
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${service.accent} flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity duration-500`}>
+                  <service.icon size={20} className="text-white" />
+                </div>
+                <div className={`w-8 h-1 rounded-full bg-gradient-to-r ${service.accent} group-hover:w-12 transition-all duration-500`} />
+              </div>
               <h3 className="text-lg font-semibold text-white/90 mb-2">{service.title}</h3>
               <p className="text-sm text-white/40 leading-relaxed">{service.description}</p>
             </motion.div>
