@@ -10,7 +10,81 @@ const roles = [
   'Freelancer',
 ];
 
-function AnimatedFigure({ isDark }: { isDark: boolean }) {
+interface Point3D {
+  x: number;
+  y: number;
+  z: number;
+}
+
+interface Edge {
+  from: number;
+  to: number;
+}
+
+function rotateX(p: Point3D, angle: number): Point3D {
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  return { x: p.x, y: p.y * cos - p.z * sin, z: p.y * sin + p.z * cos };
+}
+
+function rotateY(p: Point3D, angle: number): Point3D {
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  return { x: p.x * cos + p.z * sin, y: p.y, z: -p.x * sin + p.z * cos };
+}
+
+function rotateZ(p: Point3D, angle: number): Point3D {
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  return { x: p.x * cos - p.y * sin, y: p.x * sin + p.y * cos, z: p.z };
+}
+
+function project(p: Point3D, cx: number, cy: number, fov: number): { x: number; y: number; scale: number } {
+  const scale = fov / (fov + p.z);
+  return { x: cx + p.x * scale, y: cy + p.y * scale, scale };
+}
+
+const cubeVertices: Point3D[] = [
+  { x: -1, y: -1, z: -1 },
+  { x:  1, y: -1, z: -1 },
+  { x:  1, y:  1, z: -1 },
+  { x: -1, y:  1, z: -1 },
+  { x: -1, y: -1, z:  1 },
+  { x:  1, y: -1, z:  1 },
+  { x:  1, y:  1, z:  1 },
+  { x: -1, y:  1, z:  1 },
+];
+
+const cubeEdges: Edge[] = [
+  { from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }, { from: 3, to: 0 },
+  { from: 4, to: 5 }, { from: 5, to: 6 }, { from: 6, to: 7 }, { from: 7, to: 4 },
+  { from: 0, to: 4 }, { from: 1, to: 5 }, { from: 2, to: 6 }, { from: 3, to: 7 },
+];
+
+const cubeFaces = [
+  { verts: [0, 1, 2, 3], color: 'indigo' as const },
+  { verts: [4, 5, 6, 7], color: 'pink' as const },
+  { verts: [0, 1, 5, 4], color: 'purple' as const },
+  { verts: [2, 3, 7, 6], color: 'indigo' as const },
+  { verts: [0, 3, 7, 4], color: 'pink' as const },
+  { verts: [1, 2, 6, 5], color: 'purple' as const },
+];
+
+const innerVertices: Point3D[] = [
+  { x:  0,   y: -0.7, z:  0   },
+  { x:  0.5, y:  0,   z:  0.3 },
+  { x: -0.3, y:  0.2, z:  0.5 },
+  { x:  0.2, y:  0.6, z: -0.2 },
+  { x: -0.5, y: -0.1, z: -0.4 },
+  { x:  0.1, y:  0.1, z: -0.6 },
+];
+
+const innerFaces = [
+  [0, 1, 2], [0, 1, 5], [0, 2, 4], [0, 4, 5],
+  [3, 1, 2], [3, 1, 5], [3, 2, 4], [3, 4, 5],
+];
+
+function RotatingCube({ isDark }: { isDark: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const timeRef = useRef(0);
@@ -20,139 +94,209 @@ function AnimatedFigure({ isDark }: { isDark: boolean }) {
       ctx.clearRect(0, 0, w, h);
 
       const cx = w * 0.5;
-      const cy = h * 0.52;
-      const glowRadius = Math.min(w, h) * 0.42;
-      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowRadius);
+      const cy = h * 0.48;
+      const cubeSize = Math.min(w, h) * 0.28;
+      const fov = 400;
+
+      const glowRadius = cubeSize * 2.2;
+      const glow = ctx.createRadialGradient(cx, cy, cubeSize * 0.3, cx, cy, glowRadius);
       if (isDark) {
-        glow.addColorStop(0, 'rgba(168, 85, 247, 0.18)');
-        glow.addColorStop(0.4, 'rgba(236, 72, 153, 0.10)');
-        glow.addColorStop(1, 'rgba(0,0,0,0)');
+        glow.addColorStop(0, 'rgba(99, 102, 241, 0.15)');
+        glow.addColorStop(0.3, 'rgba(168, 85, 247, 0.10)');
+        glow.addColorStop(0.6, 'rgba(236, 72, 153, 0.05)');
+        glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
       } else {
-        glow.addColorStop(0, 'rgba(168, 85, 247, 0.12)');
-        glow.addColorStop(0.4, 'rgba(236, 72, 153, 0.06)');
-        glow.addColorStop(1, 'rgba(255,255,255,0)');
+        glow.addColorStop(0, 'rgba(99, 102, 241, 0.10)');
+        glow.addColorStop(0.3, 'rgba(168, 85, 247, 0.06)');
+        glow.addColorStop(0.6, 'rgba(236, 72, 153, 0.03)');
+        glow.addColorStop(1, 'rgba(255, 255, 255, 0)');
       }
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, w, h);
 
-      const figScale = Math.min(w, h) * 0.0028;
-      const figX = cx;
-      const figY = cy + 20 + Math.sin(t * 0.8) * 6;
+      const rx = t * 0.3;
+      const ry = t * 0.5;
+      const rz = t * 0.15;
 
-      ctx.save();
-      ctx.translate(figX, figY);
-      ctx.scale(figScale, figScale);
-
-      ctx.beginPath();
-      ctx.arc(0, -75, 18, 0, Math.PI * 2);
-      const headGrad = ctx.createRadialGradient(0, -75, 0, 0, -75, 18);
-      if (isDark) {
-        headGrad.addColorStop(0, 'rgba(200, 180, 220, 0.9)');
-        headGrad.addColorStop(1, 'rgba(139, 92, 246, 0.7)');
-      } else {
-        headGrad.addColorStop(0, 'rgba(120, 80, 180, 0.85)');
-        headGrad.addColorStop(1, 'rgba(99, 60, 160, 0.65)');
-      }
-      ctx.fillStyle = headGrad;
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(-22, -55);
-      ctx.quadraticCurveTo(-28, 0, -20, 60);
-      ctx.lineTo(20, 60);
-      ctx.quadraticCurveTo(28, 0, 22, -55);
-      ctx.closePath();
-      const bodyGrad = ctx.createLinearGradient(0, -55, 0, 60);
-      if (isDark) {
-        bodyGrad.addColorStop(0, 'rgba(139, 92, 246, 0.75)');
-        bodyGrad.addColorStop(1, 'rgba(236, 72, 153, 0.55)');
-      } else {
-        bodyGrad.addColorStop(0, 'rgba(109, 62, 216, 0.7)');
-        bodyGrad.addColorStop(1, 'rgba(206, 52, 133, 0.5)');
-      }
-      ctx.fillStyle = bodyGrad;
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(-22, -45);
-      ctx.quadraticCurveTo(-55, -10 + Math.sin(t * 1.2) * 8, -40, 20 + Math.sin(t * 1.2) * 5);
-      ctx.lineWidth = 6;
-      ctx.strokeStyle = isDark ? 'rgba(139, 92, 246, 0.6)' : 'rgba(109, 62, 216, 0.55)';
-      ctx.lineCap = 'round';
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(22, -45);
-      ctx.quadraticCurveTo(55, -15 + Math.sin(t * 1.2 + 1) * 8, 42, 15 + Math.sin(t * 1.2 + 1) * 5);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(-8, 60);
-      ctx.lineTo(-15, 110);
-      ctx.lineWidth = 7;
-      ctx.strokeStyle = isDark ? 'rgba(99, 102, 241, 0.5)' : 'rgba(79, 72, 211, 0.45)';
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(8, 60);
-      ctx.lineTo(15, 110);
-      ctx.stroke();
-
-      ctx.restore();
-
-      const orbitElements = [
-        { angle: t * 0.5, radius: glowRadius * 0.65, size: 14, color: isDark ? 'rgba(99, 102, 241, 0.8)' : 'rgba(79, 72, 211, 0.7)', label: 'AI' },
-        { angle: t * 0.4 + 2, radius: glowRadius * 0.75, size: 10, color: isDark ? 'rgba(236, 72, 153, 0.7)' : 'rgba(206, 52, 133, 0.6)', label: 'ML' },
-        { angle: t * 0.35 + 4, radius: glowRadius * 0.55, size: 12, color: isDark ? 'rgba(168, 85, 247, 0.75)' : 'rgba(138, 55, 217, 0.65)', label: 'DL' },
-        { angle: t * 0.45 + 1, radius: glowRadius * 0.85, size: 8, color: isDark ? 'rgba(139, 92, 246, 0.6)' : 'rgba(109, 62, 216, 0.5)', label: '' },
-        { angle: t * 0.3 + 5, radius: glowRadius * 0.7, size: 9, color: isDark ? 'rgba(244, 114, 182, 0.6)' : 'rgba(214, 84, 152, 0.5)', label: '' },
-      ];
-
-      orbitElements.forEach((el) => {
-        const ex = cx + Math.cos(el.angle) * el.radius;
-        const ey = cy + Math.sin(el.angle) * el.radius * 0.6;
-
-        const orbGlow = ctx.createRadialGradient(ex, ey, 0, ex, ey, el.size * 3);
-        orbGlow.addColorStop(0, el.color.replace(/[\d.]+\)$/, '0.15)'));
-        orbGlow.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = orbGlow;
-        ctx.beginPath();
-        ctx.arc(ex, ey, el.size * 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(ex, ey, el.size, 0, Math.PI * 2);
-        ctx.fillStyle = el.color;
-        ctx.fill();
-
-        if (el.label) {
-          ctx.font = `bold ${el.size * 0.8}px Inter, sans-serif`;
-          ctx.fillStyle = 'rgba(255,255,255,0.9)';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(el.label, ex, ey);
-        }
+      const transformed = cubeVertices.map((v) => {
+        let p: Point3D = { x: v.x * cubeSize, y: v.y * cubeSize, z: v.z * cubeSize };
+        p = rotateX(p, rx);
+        p = rotateY(p, ry);
+        p = rotateZ(p, rz);
+        return p;
       });
 
-      orbitElements.forEach((el) => {
-        const ex = cx + Math.cos(el.angle) * el.radius;
-        const ey = cy + Math.sin(el.angle) * el.radius * 0.6;
+      const projected = transformed.map((p) => project(p, cx, cy, fov));
+
+      const innerTransformed = innerVertices.map((v) => {
+        let p: Point3D = { x: v.x * cubeSize, y: v.y * cubeSize, z: v.z * cubeSize };
+        p = rotateX(p, rx);
+        p = rotateY(p, ry);
+        p = rotateZ(p, rz);
+        return p;
+      });
+      const innerProjected = innerTransformed.map((p) => project(p, cx, cy, fov));
+
+      const faceDepths = cubeFaces.map((face, i) => {
+        const avgZ = face.verts.reduce((sum, vi) => sum + transformed[vi].z, 0) / face.verts.length;
+        return { index: i, avgZ };
+      });
+      faceDepths.sort((a, b) => a.avgZ - b.avgZ);
+
+      const faceColors: Record<string, { dark: string; light: string }> = {
+        indigo: { dark: 'rgba(99, 102, 241, 0.08)', light: 'rgba(99, 102, 241, 0.06)' },
+        purple: { dark: 'rgba(168, 85, 247, 0.08)', light: 'rgba(168, 85, 247, 0.06)' },
+        pink: { dark: 'rgba(236, 72, 153, 0.08)', light: 'rgba(236, 72, 153, 0.06)' },
+      };
+
+      faceDepths.forEach(({ index }) => {
+        const face = cubeFaces[index];
+        const pts = face.verts.map((vi) => projected[vi]);
         ctx.beginPath();
-        ctx.moveTo(figX, figY - 30);
-        ctx.lineTo(ex, ey);
-        ctx.strokeStyle = isDark ? 'rgba(139, 92, 246, 0.08)' : 'rgba(109, 62, 216, 0.06)';
-        ctx.lineWidth = 1;
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) {
+          ctx.lineTo(pts[i].x, pts[i].y);
+        }
+        ctx.closePath();
+        const colors = faceColors[face.color];
+        ctx.fillStyle = isDark ? colors.dark : colors.light;
+        ctx.fill();
+      });
+
+      const innerFaceDepths = innerFaces.map((face, i) => {
+        const avgZ = face.reduce((sum, vi) => sum + innerTransformed[vi].z, 0) / face.length;
+        return { index: i, avgZ };
+      });
+      innerFaceDepths.sort((a, b) => a.avgZ - b.avgZ);
+
+      const innerColors = [
+        isDark ? 'rgba(99, 102, 241, 0.35)' : 'rgba(99, 102, 241, 0.25)',
+        isDark ? 'rgba(168, 85, 247, 0.40)' : 'rgba(168, 85, 247, 0.30)',
+        isDark ? 'rgba(236, 72, 153, 0.35)' : 'rgba(236, 72, 153, 0.25)',
+        isDark ? 'rgba(139, 92, 246, 0.30)' : 'rgba(139, 92, 246, 0.20)',
+        isDark ? 'rgba(244, 114, 182, 0.35)' : 'rgba(244, 114, 182, 0.25)',
+        isDark ? 'rgba(129, 140, 248, 0.40)' : 'rgba(129, 140, 248, 0.30)',
+        isDark ? 'rgba(192, 132, 252, 0.30)' : 'rgba(192, 132, 252, 0.20)',
+        isDark ? 'rgba(236, 72, 153, 0.45)' : 'rgba(236, 72, 153, 0.35)',
+      ];
+
+      innerFaceDepths.forEach(({ index }) => {
+        const face = innerFaces[index];
+        const pts = face.map((vi) => innerProjected[vi]);
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) {
+          ctx.lineTo(pts[i].x, pts[i].y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = innerColors[index % innerColors.length];
+        ctx.fill();
+        ctx.strokeStyle = isDark ? 'rgba(168, 85, 247, 0.15)' : 'rgba(168, 85, 247, 0.10)';
+        ctx.lineWidth = 0.5;
         ctx.stroke();
       });
 
-      for (let i = 0; i < 20; i++) {
-        const px = cx + Math.sin(t * 0.3 + i * 1.7) * glowRadius * 0.9;
-        const py = cy + Math.cos(t * 0.25 + i * 2.1) * glowRadius * 0.7;
-        const ps = 1 + Math.sin(t + i) * 0.5;
+      cubeEdges.forEach((edge) => {
+        const p1 = projected[edge.from];
+        const p2 = projected[edge.to];
+        const z1 = transformed[edge.from].z;
+        const z2 = transformed[edge.to].z;
+        const avgZ = (z1 + z2) / 2;
+        const depthFactor = 0.3 + 0.7 * ((avgZ + cubeSize) / (2 * cubeSize));
+
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = isDark
+          ? `rgba(168, 85, 247, ${0.06 * depthFactor})`
+          : `rgba(168, 85, 247, ${0.04 * depthFactor})`;
+        ctx.lineWidth = 6;
+        ctx.stroke();
+
+        const edgeGrad = ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+        if (isDark) {
+          edgeGrad.addColorStop(0, `rgba(99, 102, 241, ${0.6 * depthFactor})`);
+          edgeGrad.addColorStop(0.5, `rgba(168, 85, 247, ${0.7 * depthFactor})`);
+          edgeGrad.addColorStop(1, `rgba(236, 72, 153, ${0.6 * depthFactor})`);
+        } else {
+          edgeGrad.addColorStop(0, `rgba(99, 102, 241, ${0.5 * depthFactor})`);
+          edgeGrad.addColorStop(0.5, `rgba(168, 85, 247, ${0.6 * depthFactor})`);
+          edgeGrad.addColorStop(1, `rgba(236, 72, 153, ${0.5 * depthFactor})`);
+        }
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = edgeGrad;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+
+      projected.forEach((p, i) => {
+        const z = transformed[i].z;
+        const brightness = 0.4 + 0.6 * ((z + cubeSize) / (2 * cubeSize));
+        const radius = 2.5 * p.scale;
+
+        const pointGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, radius * 4);
+        if (isDark) {
+          pointGlow.addColorStop(0, `rgba(168, 85, 247, ${0.3 * brightness})`);
+          pointGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        } else {
+          pointGlow.addColorStop(0, `rgba(168, 85, 247, ${0.2 * brightness})`);
+          pointGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        }
+        ctx.fillStyle = pointGlow;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, radius * 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = isDark
+          ? `rgba(255, 255, 255, ${0.7 * brightness})`
+          : `rgba(139, 92, 246, ${0.6 * brightness})`;
+        ctx.fill();
+      });
+
+      for (let i = 0; i < 25; i++) {
+        const angle = t * 0.2 + i * (Math.PI * 2 / 25);
+        const r = cubeSize * (1.6 + Math.sin(t * 0.5 + i * 0.7) * 0.4);
+        const yOff = Math.sin(t * 0.3 + i * 1.3) * cubeSize * 0.8;
+        const px = cx + Math.cos(angle) * r;
+        const py = cy + yOff;
+        const ps = 1 + Math.sin(t * 0.8 + i) * 0.5;
+        const alpha = 0.15 + Math.sin(t + i * 0.5) * 0.1;
+
         ctx.beginPath();
         ctx.arc(px, py, ps, 0, Math.PI * 2);
-        ctx.fillStyle = isDark ? `rgba(168, 85, 247, ${0.15 + Math.sin(t + i) * 0.1})` : `rgba(138, 55, 217, ${0.1 + Math.sin(t + i) * 0.08})`;
+        if (i % 3 === 0) {
+          ctx.fillStyle = isDark ? `rgba(99, 102, 241, ${alpha})` : `rgba(99, 102, 241, ${alpha * 0.7})`;
+        } else if (i % 3 === 1) {
+          ctx.fillStyle = isDark ? `rgba(168, 85, 247, ${alpha})` : `rgba(168, 85, 247, ${alpha * 0.7})`;
+        } else {
+          ctx.fillStyle = isDark ? `rgba(236, 72, 153, ${alpha})` : `rgba(236, 72, 153, ${alpha * 0.7})`;
+        }
         ctx.fill();
+      }
+
+      const streakAngle = t * 0.4;
+      for (let i = 0; i < 3; i++) {
+        const sa = streakAngle + i * (Math.PI * 2 / 3);
+        const sx = cx + Math.cos(sa) * cubeSize * 0.3;
+        const sy = cy + Math.sin(sa) * cubeSize * 0.3;
+        const ex = cx + Math.cos(sa + 0.3) * cubeSize * 0.6;
+        const ey = cy + Math.sin(sa + 0.3) * cubeSize * 0.6;
+
+        const streakGrad = ctx.createLinearGradient(sx, sy, ex, ey);
+        streakGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+        streakGrad.addColorStop(0.5, isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.06)');
+        streakGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(ex, ey);
+        ctx.strokeStyle = streakGrad;
+        ctx.lineWidth = 2;
+        ctx.stroke();
       }
     },
     [isDark]
@@ -189,6 +333,94 @@ function AnimatedFigure({ isDark }: { isDark: boolean }) {
   }, [draw]);
 
   return <canvas ref={canvasRef} className="w-full h-full" />;
+}
+
+function AnimatedWaves({ isDark }: { isDark: boolean }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animRef = useRef<number>(0);
+  const timeRef = useRef(0);
+
+  const draw = useCallback(
+    (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => {
+      ctx.clearRect(0, 0, w, h);
+
+      const waveConfigs = [
+        { amplitude: 30, frequency: 0.008, speed: 0.5, yOffset: h * 0.75, color: isDark ? 'rgba(99, 102, 241, 0.06)' : 'rgba(99, 102, 241, 0.04)' },
+        { amplitude: 25, frequency: 0.012, speed: 0.7, yOffset: h * 0.78, color: isDark ? 'rgba(168, 85, 247, 0.05)' : 'rgba(168, 85, 247, 0.03)' },
+        { amplitude: 20, frequency: 0.015, speed: 0.9, yOffset: h * 0.82, color: isDark ? 'rgba(236, 72, 153, 0.04)' : 'rgba(236, 72, 153, 0.025)' },
+        { amplitude: 35, frequency: 0.006, speed: 0.3, yOffset: h * 0.70, color: isDark ? 'rgba(139, 92, 246, 0.04)' : 'rgba(139, 92, 246, 0.025)' },
+        { amplitude: 15, frequency: 0.02,  speed: 1.1, yOffset: h * 0.85, color: isDark ? 'rgba(244, 114, 182, 0.035)' : 'rgba(244, 114, 182, 0.02)' },
+      ];
+
+      waveConfigs.forEach((wave) => {
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        for (let x = 0; x <= w; x += 2) {
+          const y = wave.yOffset +
+            Math.sin(x * wave.frequency + t * wave.speed) * wave.amplitude +
+            Math.sin(x * wave.frequency * 0.5 + t * wave.speed * 1.3) * wave.amplitude * 0.5;
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fillStyle = wave.color;
+        ctx.fill();
+      });
+
+      const lineWaves = [
+        { amplitude: 20, frequency: 0.01, speed: 0.6, yOffset: h * 0.72, color: isDark ? 'rgba(99, 102, 241, 0.08)' : 'rgba(99, 102, 241, 0.05)' },
+        { amplitude: 15, frequency: 0.014, speed: 0.8, yOffset: h * 0.76, color: isDark ? 'rgba(168, 85, 247, 0.06)' : 'rgba(168, 85, 247, 0.04)' },
+        { amplitude: 18, frequency: 0.009, speed: 0.4, yOffset: h * 0.68, color: isDark ? 'rgba(236, 72, 153, 0.05)' : 'rgba(236, 72, 153, 0.03)' },
+      ];
+
+      lineWaves.forEach((wave) => {
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 2) {
+          const y = wave.yOffset +
+            Math.sin(x * wave.frequency + t * wave.speed) * wave.amplitude +
+            Math.cos(x * wave.frequency * 0.7 + t * wave.speed * 0.8) * wave.amplitude * 0.3;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = wave.color;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+    },
+    [isDark]
+  );
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const animate = () => {
+      timeRef.current += 0.016;
+      const rect = canvas.getBoundingClientRect();
+      draw(ctx, rect.width, rect.height, timeRef.current);
+      animRef.current = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animRef.current);
+    };
+  }, [draw]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 }
 
 export function Hero() {
@@ -228,6 +460,8 @@ export function Hero() {
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       <div className={`absolute inset-0 ${isDark ? 'bg-[#0a0a0a]' : 'bg-[#fafafa]'}`} />
+
+      <AnimatedWaves isDark={isDark} />
 
       <div className={`absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full blur-[120px] ${isDark ? 'bg-indigo-500/10' : 'bg-indigo-500/5'}`} />
       <div className={`absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[100px] ${isDark ? 'bg-purple-500/8' : 'bg-purple-500/4'}`} />
@@ -362,7 +596,7 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.3 }}
             className="relative w-full aspect-square max-w-[480px] mx-auto lg:mx-0"
           >
-            <AnimatedFigure isDark={isDark} />
+            <RotatingCube isDark={isDark} />
           </motion.div>
         </div>
       </div>
