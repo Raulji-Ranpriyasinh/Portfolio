@@ -5,11 +5,12 @@
 /* Custom smooth scrolling */
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Custom scrollbar - dark theme */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -52,6 +53,28 @@ html {
   background-clip: text;
 }
 
+/* Animated gradient text shimmer */
+.gradient-text-animated {
+  background: linear-gradient(
+    90deg,
+    #6366f1 0%,
+    #a855f7 25%,
+    #ec4899 50%,
+    #a855f7 75%,
+    #6366f1 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shimmer 4s linear infinite;
+}
+
+@keyframes gradient-shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
 /* Glow effect */
 .glow {
   box-shadow: 0 0 20px rgba(99, 102, 241, 0.15), 0 0 60px rgba(168, 85, 247, 0.1);
@@ -59,6 +82,30 @@ html {
 
 .glow-text {
   text-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+}
+
+/* Card hover glow border */
+.card-glow {
+  position: relative;
+  overflow: hidden;
+}
+.card-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.2), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.card-glow:hover::before {
+  opacity: 1;
 }
 
 /* Marquee animation */
@@ -76,6 +123,12 @@ html {
 }
 .animate-marquee-reverse {
   animation: marquee-reverse 25s linear infinite;
+}
+
+/* Pause marquee on hover */
+.marquee-container:hover .animate-marquee,
+.marquee-container:hover .animate-marquee-reverse {
+  animation-play-state: paused;
 }
 
 /* Typing cursor */
@@ -102,4 +155,62 @@ html {
 
 .animate-float-slow {
   animation: float 8s ease-in-out 1s infinite;
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  transform-origin: left;
+  background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+}
+
+/* Section divider animated gradient */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.4), rgba(236, 72, 153, 0.3), transparent);
+  background-size: 200% 100%;
+  animation: divider-pulse 4s ease-in-out infinite;
+}
+
+@keyframes divider-pulse {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Smooth backdrop for mobile nav */
+.mobile-nav-backdrop {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* Pulse ring for status indicator */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  position: relative;
+}
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.4);
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Scroll to top button */
+.scroll-top-btn {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.scroll-top-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
 }
