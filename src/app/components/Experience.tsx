@@ -35,28 +35,28 @@ const experiences = [
 
 export function Experience() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="experience" className="py-24 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+    <section id="experience" className="py-16 md:py-24 relative">
+      <div className="section-divider" />
 
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-0">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-16"
+          className="mb-10 md:mb-16"
         >
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4 block">Experience</span>
-          <h2 className="text-3xl md:text-5xl font-bold">
+          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-3 md:mb-4 block">Experience</span>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold">
             Where I've{' '}
             <span className="gradient-text">made impact</span>.
           </h2>
         </motion.div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           {experiences.map((exp, index) => (
             <motion.div
               key={exp.role}
@@ -65,39 +65,39 @@ export function Experience() {
               transition={{ duration: 0.6, delay: 0.1 + index * 0.15 }}
               className="group"
             >
-              <div className="relative p-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500 overflow-hidden">
+              <div className="relative p-5 sm:p-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500 overflow-hidden card-glow">
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 {/* Header row */}
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-4 mb-4 md:mb-6">
                   <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl md:text-2xl font-semibold text-white/90">{exp.role}</h3>
-                      <ArrowUpRight size={18} className="text-white/20 group-hover:text-white/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
+                    <div className="flex items-start sm:items-center gap-2 sm:gap-3 mb-2">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white/90">{exp.role}</h3>
+                      <ArrowUpRight size={18} className="text-white/20 group-hover:text-white/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0 mt-1 sm:mt-0" />
                     </div>
-                    <div className="flex items-center gap-3 text-sm">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
                       <span className="px-2.5 py-0.5 rounded-full border border-white/10 text-white/40">{exp.type}</span>
                       <span className="text-white/30">{exp.scope}</span>
                     </div>
                   </div>
-                  <span className="text-sm text-white/30 font-mono shrink-0">{exp.period}</span>
+                  <span className="text-xs sm:text-sm text-white/30 font-mono shrink-0">{exp.period}</span>
                 </div>
 
                 {/* Highlights */}
-                <div className="space-y-2.5 mb-6">
+                <div className="space-y-2 md:space-y-2.5 mb-4 md:mb-6">
                   {exp.highlights.map((highlight, i) => (
-                    <div key={i} className="flex gap-3 items-start">
-                      <div className="w-1 h-1 rounded-full bg-white/20 mt-2.5 shrink-0" />
-                      <p className="text-sm text-white/40 leading-relaxed">{highlight}</p>
+                    <div key={i} className="flex gap-2 sm:gap-3 items-start">
+                      <div className="w-1 h-1 rounded-full bg-white/20 mt-2 sm:mt-2.5 shrink-0" />
+                      <p className="text-xs sm:text-sm text-white/40 leading-relaxed">{highlight}</p>
                     </div>
                   ))}
                 </div>
 
                 {/* Stack */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 md:gap-2">
                   {exp.stack.map((tech) => (
                     <span
                       key={tech}
-                      className="px-3 py-1 text-xs rounded-full border border-white/10 text-white/40 bg-white/[0.02]"
+                      className="px-2.5 py-1 md:px-3 text-[11px] md:text-xs rounded-full border border-white/10 text-white/40 bg-white/[0.02]"
                     >
                       {tech}
                     </span>
@@ -113,16 +113,16 @@ export function Experience() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-6 p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500"
+          className="mt-4 md:mt-6 p-5 sm:p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500 card-glow"
         >
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-2">
             <div>
-              <h3 className="text-lg font-semibold text-white/80">B.Tech in Computer Science</h3>
-              <p className="text-sm text-white/30">Data Science Specialization · ITM Vocational University</p>
+              <h3 className="text-base sm:text-lg font-semibold text-white/80">B.Tech in Computer Science</h3>
+              <p className="text-xs sm:text-sm text-white/30">Data Science Specialization · ITM Vocational University</p>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-2xl font-bold gradient-text">9.0 CGPA</span>
-              <span className="text-sm text-white/30 font-mono">2021 — 2025</span>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <span className="text-xl sm:text-2xl font-bold gradient-text">9.0 CGPA</span>
+              <span className="text-xs sm:text-sm text-white/30 font-mono">2021 — 2025</span>
             </div>
           </div>
         </motion.div>
