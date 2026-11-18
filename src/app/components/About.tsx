@@ -1,138 +1,94 @@
-import { motion } from 'motion/react';
-import { useInView } from 'motion/react';
-import { useRef } from 'react';
-import { Brain, Code2, BarChart3, Lightbulb } from 'lucide-react';
+import React from 'react';
 
-const stats = [
-  { number: '20+', label: 'Projects Delivered' },
-  { number: '3+', label: 'Years Experience' },
-  { number: '8+', label: 'AI/ML Models Built' },
-  { number: '9.0', label: 'CGPA - B.Tech CS' },
-];
+const AVATAR_URL = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCacnR8gkBoAslMZKSI5RplHbnmHJz5O3Iq75V4sIafYZ-jVv9VjHH1hm5ApQjLB-6YznMGCBZLaXdzIKXEv3vuxyF3VLQLd1FPk8S9nNJWorK8yoXhYzPxDjd66wvk1lCC1Vxa44jVWp1k-Rl65qIVJ3opFms_aQUMhb2Ft55fzjH0GphHZC2S1_vQAPNa-GkaWEuMvps3hgB23EcSLpP728q7e9344xUZLMqcy6Q';
 
-const services = [
-  {
-    title: 'Generative AI & LLMs',
-    description: 'RAG pipelines, conversational agents, LLM-powered automation workflows, and AI-driven content generation systems.',
-    accent: 'from-indigo-500 to-purple-500',
-    icon: Brain,
-  },
-  {
-    title: 'Full-Stack Development',
-    description: 'End-to-end web applications with React, Flask, FastAPI, and modern architectures that scale.',
-    accent: 'from-purple-500 to-pink-500',
-    icon: Code2,
-  },
-  {
-    title: 'Data Science & ML',
-    description: 'Predictive models, sentiment analysis, recommendation engines, and deep learning solutions.',
-    accent: 'from-pink-500 to-rose-500',
-    icon: BarChart3,
-  },
-  {
-    title: 'AI Consulting',
-    description: 'Strategic guidance on AI integration, architecture design, and intelligent automation for businesses.',
-    accent: 'from-rose-500 to-orange-500',
-    icon: Lightbulb,
-  },
-];
-
-export function About() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
+export const About: React.FC = () => {
   return (
-    <section id="about" className="py-24 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+    <section id="about" className="px-4 sm:px-6 py-12 sm:py-16 max-w-6xl mx-auto w-full">
+      <div className="mb-8">
+        <span className="text-xs sm:text-sm font-bold text-[#FF5A4E] tracking-wider uppercase block mb-1">
+          The Craftsman
+        </span>
+        <h2 className="font-extrabold text-2xl sm:text-3xl md:text-4xl text-[#1B1B2F]">
+          Meet Ranpriyasinh
+        </h2>
+      </div>
 
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        {/* Section header */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4 block">About</span>
-          <h2 className="text-3xl md:text-5xl font-bold leading-tight max-w-2xl">
-            Building at the{' '}
-            <span className="gradient-text">intersection of AI & product</span>.
-          </h2>
-        </motion.div>
-
-        {/* Bento grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
-          {/* Bio card - spans 2 cols */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="md:col-span-2 lg:col-span-2 p-8 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500"
-          >
-            <p className="text-white/50 leading-relaxed mb-4">
-              As an independent AI/ML Engineer and Full-Stack Developer, I've spent the last 3+ years 
-              turning complex challenges into production-ready products. From designing{' '}
-              <span className="text-white/80">LLM-powered agents</span> and{' '}
-              <span className="text-white/80">RAG documentation assistants</span> to building{' '}
-              <span className="text-white/80">full-stack web applications</span>, I bring both technical depth 
-              and product thinking to every engagement.
+      <div className="bg-white p-6 sm:p-10 rounded-3xl shadow-[5px_5px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col gap-6">
+        {/* Profile Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shadow-[3px_3px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex-shrink-0">
+            <img
+              alt="Ranpriyasinh Developer"
+              className="w-full h-full object-cover object-top"
+              src={AVATAR_URL}
+            />
+          </div>
+          <div>
+            <h3 className="font-extrabold text-2xl text-[#1B1B2F]">Ranpriyasinh</h3>
+            <p className="text-sm sm:text-base text-[#514532] font-semibold">
+              Independent Full-Stack Developer
             </p>
-            <p className="text-white/50 leading-relaxed">
-              I specialize in <span className="text-white/80">LangChain</span>,{' '}
-              <span className="text-white/80">CrewAI agents</span>,{' '}
-              <span className="text-white/80">vector databases</span>, and{' '}
-              <span className="text-white/80">Python/React stacks</span> — 
-              building systems that are not just smart, but reliable and maintainable.
-            </p>
-          </motion.div>
-
-          {/* Stats cards */}
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 + index * 0.05 }}
-              className="p-6 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-500 flex flex-col justify-center"
-            >
-              <div className="text-3xl md:text-4xl font-bold gradient-text mb-1">{stat.number}</div>
-              <div className="text-xs text-white/30 uppercase tracking-wider">{stat.label}</div>
-            </motion.div>
-          ))}
+            <span className="inline-block mt-2 text-xs font-extrabold bg-[#12A594] text-white px-3 py-1 rounded-full shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              Vadodara, Gujarat, India
+            </span>
+          </div>
         </div>
 
-        {/* Services */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-6"
-        >
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-6 block">What I do</span>
-        </motion.div>
+        {/* Story */}
+        <div className="flex flex-col gap-3 text-sm sm:text-base text-[#514532] font-medium leading-relaxed">
+          <p>
+            I started coding because I loved building things people use every day. Over the past 6 years, I watched dozens of local Gujarat business owners get burned by big agencies who overpromised, charged heavy markups, and left them with broken templates.
+          </p>
+          <p>
+            I believe in doing the exact opposite: simple, robust code that loads instantly, clear communication in English or Gujarati, and software that actually earns its keep.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {services.map((service, index) => (
-            <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.35 + index * 0.08 }}
-              className="group p-6 rounded-2xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-500"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${service.accent} flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity duration-500`}>
-                  <service.icon size={20} className="text-white" />
-                </div>
-                <div className={`w-8 h-1 rounded-full bg-gradient-to-r ${service.accent} group-hover:w-12 transition-all duration-500`} />
-              </div>
-              <h3 className="text-lg font-semibold text-white/90 mb-2">{service.title}</h3>
-              <p className="text-sm text-white/40 leading-relaxed">{service.description}</p>
-            </motion.div>
-          ))}
+        {/* Fast Facts Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+          <div className="bg-[#f4ede1] p-3.5 rounded-2xl border border-[#1B1B2F]/20 shadow-[2px_2px_0px_#1B1B2F]">
+            <span className="text-xs text-[#514532] block font-semibold mb-0.5">📍 Based in</span>
+            <span className="text-sm font-extrabold text-[#1B1B2F]">Alkapuri, Vadodara</span>
+          </div>
+          <div className="bg-[#f4ede1] p-3.5 rounded-2xl border border-[#1B1B2F]/20 shadow-[2px_2px_0px_#1B1B2F]">
+            <span className="text-xs text-[#514532] block font-semibold mb-0.5">🗣️ Languages</span>
+            <span className="text-sm font-extrabold text-[#1B1B2F]">English, Gujarati, Hindi</span>
+          </div>
+          <div className="bg-[#f4ede1] p-3.5 rounded-2xl border border-[#1B1B2F]/20 shadow-[2px_2px_0px_#1B1B2F]">
+            <span className="text-xs text-[#514532] block font-semibold mb-0.5">☕ Daily Engine</span>
+            <span className="text-sm font-extrabold text-[#1B1B2F]">Adrak & Masala Chai</span>
+          </div>
+          <div className="bg-[#f4ede1] p-3.5 rounded-2xl border border-[#1B1B2F]/20 shadow-[2px_2px_0px_#1B1B2F]">
+            <span className="text-xs text-[#514532] block font-semibold mb-0.5">⏱️ Work Policy</span>
+            <span className="text-sm font-extrabold text-[#1B1B2F]">Max 2 projects at once</span>
+          </div>
+        </div>
+
+        {/* Core Tech Chips */}
+        <div className="pt-2 border-t border-[#1B1B2F]/10">
+          <span className="text-xs font-extrabold text-[#514532] uppercase tracking-wider block mb-3">
+            Everyday Tech Stack:
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {[
+              'React / Next.js',
+              'React Native',
+              'Python (FastAPI)',
+              'PostgreSQL',
+              'Tailwind CSS',
+              'Razorpay & Stripe',
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="px-3.5 py-1.5 bg-[#f4ede1] text-[#1B1B2F] font-bold text-xs sm:text-sm rounded-xl shadow-[2px_2px_0px_#1B1B2F] border border-[#1B1B2F] hover:bg-[#ffb703] transition-colors"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
-}
+};

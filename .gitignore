@@ -1,0 +1,6 @@
+node_modules
+stitch_freelance_developer_portfolio_website.zip
+dist
+dist/
+.env
+.env.local

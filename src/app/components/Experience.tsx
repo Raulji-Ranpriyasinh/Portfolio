@@ -1,132 +1,100 @@
-import { motion } from 'motion/react';
-import { useInView } from 'motion/react';
-import { useRef } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import React from 'react';
 
-const experiences = [
-  {
-    role: 'Freelance AI/ML Engineer & Full-Stack Developer',
-    type: 'Independent',
-    period: '2024 — Present',
-    scope: 'Remote · Worldwide',
-    highlights: [
-      'Built a Generative AI text-to-video automation system with LLM pipelines and Azure OpenAI APIs',
-      'Designed RAG-based proposal generation assistant using vector databases for contextual retrieval',
-      'Created AI automation pipelines with CrewAI agents for data extraction and web research',
-      'Engineered AI-based candidate-job matching engine using NLP for recruitment screening',
-      'Automated backend workflows with intelligent bots for data transformation and insertion',
-    ],
-    stack: ['LangChain', 'CrewAI', 'Azure OpenAI', 'React', 'FastAPI', 'Python'],
-  },
-  {
-    role: 'Associate AI/ML Engineer',
-    type: 'Contract',
-    period: '2023 — 2024',
-    scope: 'Vadodara, Gujarat',
-    highlights: [
-      'Designed LLM-powered conversational agent for healthcare appointment scheduling',
-      'Developed RAG-based documentation assistant with vector embeddings and semantic search',
-      'Implemented retrieval pipelines and embedding-based search for AI-powered support systems',
-      'Contributed to AI-driven healthcare data workflows with ML models and data pipelines',
-    ],
-    stack: ['LLMs', 'RAG', 'Flask', 'Vector DBs', 'Python', 'TensorFlow'],
-  },
-];
-
-export function Experience() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
+export const Process: React.FC = () => {
   return (
-    <section id="experience" className="py-24 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4 block">Experience</span>
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Where I've{' '}
-            <span className="gradient-text">made impact</span>.
+    <section id="process" className="px-4 sm:px-6 py-12 sm:py-16 max-w-6xl mx-auto w-full">
+      <div className="bg-[#faf3e7] p-6 sm:p-10 rounded-3xl shadow-[inset_0_2px_8px_rgba(0,0,0,0.03)] border-2 border-[#1B1B2F] flex flex-col gap-8">
+        <div>
+          <span className="text-xs sm:text-sm font-bold text-[#FF5A4E] tracking-wider uppercase block mb-1">
+            No Mysteries
+          </span>
+          <h2 className="font-extrabold text-2xl sm:text-3xl md:text-4xl text-[#1B1B2F]">
+            How We Work Together
           </h2>
-        </motion.div>
-
-        <div className="space-y-6">
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={exp.role}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 + index * 0.15 }}
-              className="group"
-            >
-              <div className="relative p-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500 overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                {/* Header row */}
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl md:text-2xl font-semibold text-white/90">{exp.role}</h3>
-                      <ArrowUpRight size={18} className="text-white/20 group-hover:text-white/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
-                    </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <span className="px-2.5 py-0.5 rounded-full border border-white/10 text-white/40">{exp.type}</span>
-                      <span className="text-white/30">{exp.scope}</span>
-                    </div>
-                  </div>
-                  <span className="text-sm text-white/30 font-mono shrink-0">{exp.period}</span>
-                </div>
-
-                {/* Highlights */}
-                <div className="space-y-2.5 mb-6">
-                  {exp.highlights.map((highlight, i) => (
-                    <div key={i} className="flex gap-3 items-start">
-                      <div className="w-1 h-1 rounded-full bg-white/20 mt-2.5 shrink-0" />
-                      <p className="text-sm text-white/40 leading-relaxed">{highlight}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Stack */}
-                <div className="flex flex-wrap gap-2">
-                  {exp.stack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 text-xs rounded-full border border-white/10 text-white/40 bg-white/[0.02]"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+          <p className="text-sm sm:text-base text-[#514532] font-medium mt-1">
+            4 transparent stages from first phone call to live launch.
+          </p>
         </div>
 
-        {/* Education */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-6 p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500"
-        >
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-            <div>
-              <h3 className="text-lg font-semibold text-white/80">B.Tech in Computer Science</h3>
-              <p className="text-sm text-white/30">Data Science Specialization · ITM Vocational University</p>
+        {/* 4 Steps: 1 col on mobile, 4 cols on desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 relative">
+          {/* Step 1 */}
+          <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-[3px_3px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-3 hover:-translate-y-1 transition-transform">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-8 rounded-full bg-[#FFB703] text-[#1B1B2F] font-extrabold flex items-center justify-center text-sm shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+                  1
+                </span>
+                <h4 className="font-extrabold text-lg text-[#1B1B2F]">The Chai & Chat</h4>
+              </div>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                A friendly 30-minute WhatsApp or Google Meet call. You explain your daily operational headache in plain words. Zero developer jargon, zero sales push.
+              </p>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-2xl font-bold gradient-text">9.0 CGPA</span>
-              <span className="text-sm text-white/30 font-mono">2021 — 2025</span>
-            </div>
+            <span className="text-xs font-bold text-[#12A594] inline-flex items-center gap-1 pt-2">
+              <span className="material-symbols-outlined text-[1rem]">schedule</span>
+              <span>30 Mins • Free Advice</span>
+            </span>
           </div>
-        </motion.div>
+
+          {/* Step 2 */}
+          <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-[3px_3px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-3 hover:-translate-y-1 transition-transform">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-8 rounded-full bg-[#3A86FF] text-white font-extrabold flex items-center justify-center text-sm shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+                  2
+                </span>
+                <h4 className="font-extrabold text-lg text-[#1B1B2F]">The 1-Page Clear Plan</h4>
+              </div>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                I send a straightforward 1-page summary, wireframe sketch, exact fixed price quote, and an exact calendar launch date. If it takes longer, that's on me.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-[#FF5A4E] inline-flex items-center gap-1 pt-2">
+              <span className="material-symbols-outlined text-[1rem]">lock</span>
+              <span>Locked Price • No Hidden Extras</span>
+            </span>
+          </div>
+
+          {/* Step 3 */}
+          <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-[3px_3px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-3 hover:-translate-y-1 transition-transform">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-8 rounded-full bg-[#12A594] text-white font-extrabold flex items-center justify-center text-sm shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+                  3
+                </span>
+                <h4 className="font-extrabold text-lg text-[#1B1B2F]">Weekly Live Previews</h4>
+              </div>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                Every Friday afternoon, you receive a private testing link on your phone. You tap around, test real features, and watch the app come to life week by week.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-[#3A86FF] inline-flex items-center gap-1 pt-2">
+              <span className="material-symbols-outlined text-[1rem]">visibility</span>
+              <span>Friday Phone Demo</span>
+            </span>
+          </div>
+
+          {/* Step 4 */}
+          <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-[3px_3px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-3 hover:-translate-y-1 transition-transform">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-8 rounded-full bg-[#FFB703] text-[#1B1B2F] font-extrabold flex items-center justify-center text-sm shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+                  4
+                </span>
+                <h4 className="font-extrabold text-lg text-[#1B1B2F]">Launch & Warm Handoff</h4>
+              </div>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                We go live together. I record a short 10-minute video showing you how to update photos or prices yourself, transfer 100% of credentials, and stay on 30-day free standby.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-[#12A594] inline-flex items-center gap-1 pt-2">
+              <span className="material-symbols-outlined text-[1rem]">verified</span>
+              <span>30 Days Free Standby Support</span>
+            </span>
+          </div>
+        </div>
       </div>
     </section>
   );
-}
+};

@@ -1,97 +1,137 @@
-import { motion } from 'motion/react';
-import { useInView } from 'motion/react';
-import { useRef } from 'react';
+import React from 'react';
 
-const row1 = ['Python', 'TypeScript', 'React', 'LangChain', 'CrewAI', 'TensorFlow', 'PyTorch', 'Flask', 'FastAPI', 'OpenCV'];
-const row2 = ['LLMs', 'RAG Pipelines', 'Prompt Engineering', 'Azure OpenAI', 'Vector Databases', 'Semantic Search', 'Agent Systems', 'Hugging Face', 'Scikit-learn', 'Pandas'];
-const row3 = ['JavaScript', 'SQL', 'C++', 'NumPy', 'Jupyter', 'REST APIs', 'Git', 'Docker', 'Postman', 'HTML/CSS'];
-
-const techStack = [
-  {
-    category: 'AI & Generative AI',
-    items: ['LLMs', 'LangChain', 'CrewAI', 'RAG Pipelines', 'Prompt Engineering', 'Azure OpenAI', 'Hugging Face Transformers', 'Agent Systems', 'Vector Databases', 'Semantic Search'],
-  },
-  {
-    category: 'Data Science & ML',
-    items: ['TensorFlow', 'PyTorch', 'Scikit-learn', 'Pandas', 'NumPy', 'OpenCV', 'Jupyter', 'Matplotlib'],
-  },
-  {
-    category: 'Full-Stack',
-    items: ['Python', 'TypeScript', 'JavaScript', 'React', 'Flask', 'FastAPI', 'REST APIs', 'SQL', 'HTML', 'CSS'],
-  },
-  {
-    category: 'Tools',
-    items: ['Git', 'GitHub', 'Docker', 'Postman', 'VS Code'],
-  },
-];
-
-export function Skills() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
+export const Services: React.FC = () => {
   return (
-    <section id="skills" className="py-24 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4 block">Skills</span>
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Technologies I{' '}
-            <span className="gradient-text">work with</span>.
+    <section id="services" className="px-4 sm:px-6 py-12 sm:py-16 max-w-6xl mx-auto w-full">
+      <div className="flex items-center justify-between mb-8 sm:mb-10">
+        <div>
+          <span className="text-xs sm:text-sm font-bold text-[#514532] tracking-wider uppercase block mb-1">
+            Services
+          </span>
+          <h2 className="font-extrabold text-2xl sm:text-3xl md:text-4xl text-[#1B1B2F]">
+            What I Can Build For You
           </h2>
-        </motion.div>
+        </div>
+        <div className="bg-[#FFB703] text-[#1B1B2F] text-xs sm:text-sm font-extrabold px-3 py-1.5 rounded-full shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] rotate-2">
+          Full Stack
+        </div>
       </div>
 
-      {/* Marquee rows */}
-      <div className="space-y-4 mb-16">
-        {[row1, row2, row3].map((row, rowIndex) => (
-          <div key={rowIndex} className="overflow-hidden">
-            <div className={`flex gap-4 ${rowIndex % 2 === 0 ? 'animate-marquee' : 'animate-marquee-reverse'}`} style={{ width: 'max-content' }}>
-              {[...row, ...row].map((skill, i) => (
-                <div
-                  key={`${skill}-${i}`}
-                  className="px-5 py-2.5 rounded-full border border-white/10 bg-white/[0.02] text-white/50 text-sm font-medium whitespace-nowrap hover:border-white/30 hover:text-white/80 hover:bg-white/[0.05] transition-all duration-300 cursor-default"
-                >
-                  {skill}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Detailed stack */}
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {techStack.map((group, index) => (
-            <motion.div
-              key={group.category}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 + index * 0.08 }}
-            >
-              <h3 className="text-xs uppercase tracking-[0.2em] text-white/30 mb-4">{group.category}</h3>
-              <div className="flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <span
-                    key={item}
-                    className="px-3 py-1.5 text-sm rounded-lg border border-white/10 bg-white/[0.03] text-white/60 hover:text-white/90 hover:border-white/20 transition-all duration-300 cursor-default"
-                  >
-                    {item}
-                  </span>
-                ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Service Card 1: Fast Business Websites */}
+        <div className="bg-[#FFB703] p-6 rounded-3xl shadow-[4px_4px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-4 text-[#1B1B2F] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#1B1B2F] transition-all">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div className="w-11 h-11 rounded-2xl bg-white text-[#1B1B2F] flex items-center justify-center shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F]">
+                <span className="material-symbols-outlined text-2xl">storefront</span>
               </div>
-            </motion.div>
-          ))}
+              <span className="text-xs font-extrabold uppercase tracking-wider bg-white/90 text-[#1B1B2F] px-2.5 py-1 rounded-full border border-[#1B1B2F]">
+                Web
+              </span>
+            </div>
+            <h3 className="font-extrabold text-xl sm:text-2xl mt-1">Fast Business Websites</h3>
+            <p className="text-sm sm:text-base leading-relaxed font-medium opacity-95">
+              Fast, clean, mobile-first websites designed so nearby customers find you on Google, tap your phone number, or get directions on Google Maps without clunky page loads.
+            </p>
+          </div>
+          <div className="pt-2 flex flex-wrap gap-2 items-center">
+            <span className="text-xs font-extrabold">Ideal for:</span>
+            <span className="text-xs font-bold bg-white px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              Clinics & Doctors
+            </span>
+            <span className="text-xs font-bold bg-white px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              Boutique Retail
+            </span>
+            <span className="text-xs font-bold bg-white px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              Consultants
+            </span>
+          </div>
+        </div>
+
+        {/* Service Card 2: Custom Web Apps & Portals */}
+        <div className="bg-[#3A86FF] p-6 rounded-3xl shadow-[4px_4px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-4 text-white hover:-translate-y-1 hover:shadow-[6px_6px_0px_#1B1B2F] transition-all">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div className="w-11 h-11 rounded-2xl bg-white text-[#3A86FF] flex items-center justify-center shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F]">
+                <span className="material-symbols-outlined text-2xl">dashboard_customize</span>
+              </div>
+              <span className="text-xs font-extrabold uppercase tracking-wider bg-white text-[#1B1B2F] px-2.5 py-1 rounded-full border border-[#1B1B2F]">
+                Custom Tools
+              </span>
+            </div>
+            <h3 className="font-extrabold text-xl sm:text-2xl mt-1 text-white">Custom Web Apps & Portals</h3>
+            <p className="text-sm sm:text-base leading-relaxed text-white/95 font-medium">
+              Internal team dashboards, appointment booking systems, inventory sheets, and vendor portals that finally retire fragile, messy spreadsheets and manual notebooks.
+            </p>
+          </div>
+          <div className="pt-2 flex flex-wrap gap-2 items-center">
+            <span className="text-xs bg-white text-[#1B1B2F] font-extrabold px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              Next.js
+            </span>
+            <span className="text-xs bg-white text-[#1B1B2F] font-extrabold px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              FastAPI / Python
+            </span>
+            <span className="text-xs bg-white text-[#1B1B2F] font-extrabold px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              PostgreSQL
+            </span>
+          </div>
+        </div>
+
+        {/* Service Card 3: Mobile Apps */}
+        <div className="bg-[#12A594] p-6 rounded-3xl shadow-[4px_4px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-4 text-white hover:-translate-y-1 hover:shadow-[6px_6px_0px_#1B1B2F] transition-all">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div className="w-11 h-11 rounded-2xl bg-white text-[#12A594] flex items-center justify-center shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F]">
+                <span className="material-symbols-outlined text-2xl">phone_iphone</span>
+              </div>
+              <span className="text-xs font-extrabold uppercase tracking-wider bg-white text-[#1B1B2F] px-2.5 py-1 rounded-full border border-[#1B1B2F]">
+                Mobile
+              </span>
+            </div>
+            <h3 className="font-extrabold text-xl sm:text-2xl mt-1 text-white">Mobile Apps (iOS & Android)</h3>
+            <p className="text-sm sm:text-base leading-relaxed text-white/95 font-medium">
+              Single unified codebase using React Native. Smooth 60fps animations, push notifications, offline syncing, camera scanning, and submission directly to Apple App Store & Google Play Store.
+            </p>
+          </div>
+          <div className="pt-2 flex flex-wrap gap-2">
+            <span className="text-xs bg-white text-[#1B1B2F] font-extrabold px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              Push Alerts
+            </span>
+            <span className="text-xs bg-white text-[#1B1B2F] font-extrabold px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              Offline Mode
+            </span>
+            <span className="text-xs bg-white text-[#1B1B2F] font-extrabold px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              UPI / Stripe
+            </span>
+          </div>
+        </div>
+
+        {/* Service Card 4: Backend & WhatsApp Bots */}
+        <div className="bg-[#FF5A4E] p-6 rounded-3xl shadow-[4px_4px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-4 text-white hover:-translate-y-1 hover:shadow-[6px_6px_0px_#1B1B2F] transition-all">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <div className="w-11 h-11 rounded-2xl bg-white text-[#FF5A4E] flex items-center justify-center shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F]">
+                <span className="material-symbols-outlined text-2xl">smart_toy</span>
+              </div>
+              <span className="text-xs font-extrabold uppercase tracking-wider bg-white text-[#1B1B2F] px-2.5 py-1 rounded-full border border-[#1B1B2F]">
+                Automation
+              </span>
+            </div>
+            <h3 className="font-extrabold text-xl sm:text-2xl mt-1 text-white">Backend APIs & WhatsApp Chatbots</h3>
+            <p className="text-sm sm:text-base leading-relaxed text-white/95 font-medium">
+              Custom WhatsApp bots that answer FAQs, confirm bookings, and take orders automatically at 2 AM — without robotic confusion or costly third-party subscriptions.
+            </p>
+          </div>
+          <div className="pt-2 flex flex-wrap gap-2">
+            <span className="text-xs bg-white text-[#1B1B2F] font-extrabold px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              WhatsApp Business API
+            </span>
+            <span className="text-xs bg-white text-[#1B1B2F] font-extrabold px-2.5 py-1 rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+              FastAPI
+            </span>
+          </div>
         </div>
       </div>
     </section>
   );
-}
+};

@@ -1,279 +1,106 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
-import { NeuralNetworkBg } from './NeuralNetworkBg';
+import React from 'react';
+import { CONTACT_CONFIG } from '../config';
 
-const codeLines = [
-  { indent: 0, tokens: [{ text: 'class', color: '#c792ea' }, { text: ' ', color: '' }, { text: 'AIEngineer', color: '#ffcb6b' }, { text: ':', color: '#89ddff' }] },
-  { indent: 1, tokens: [{ text: 'skills', color: '#f78c6c' }, { text: ' = ', color: '#89ddff' }, { text: '[', color: '#89ddff' }] },
-  { indent: 2, tokens: [{ text: '"LangChain"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }, { text: ' "RAG"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }] },
-  { indent: 2, tokens: [{ text: '"CrewAI"', color: '#c3e88d' }, { text: ',', color: '#89ddff' }, { text: ' "PyTorch"', color: '#c3e88d' }] },
-  { indent: 1, tokens: [{ text: ']', color: '#89ddff' }] },
-  { indent: 0, tokens: [] },
-  { indent: 1, tokens: [{ text: 'def', color: '#c792ea' }, { text: ' ', color: '' }, { text: 'build', color: '#82aaff' }, { text: '(', color: '#89ddff' }, { text: 'self', color: '#f78c6c' }, { text: ', ', color: '#89ddff' }, { text: 'vision', color: '#f78c6c' }, { text: '):', color: '#89ddff' }] },
-  { indent: 2, tokens: [{ text: 'return', color: '#c792ea' }, { text: ' self.', color: '#eeffff' }, { text: 'deploy', color: '#82aaff' }, { text: '(', color: '#89ddff' }] },
-  { indent: 3, tokens: [{ text: 'self.', color: '#eeffff' }, { text: 'train', color: '#82aaff' }, { text: '(vision)', color: '#89ddff' }] },
-  { indent: 2, tokens: [{ text: ')', color: '#89ddff' }] },
-];
+const AVATAR_URL = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCacnR8gkBoAslMZKSI5RplHbnmHJz5O3Iq75V4sIafYZ-jVv9VjHH1hm5ApQjLB-6YznMGCBZLaXdzIKXEv3vuxyF3VLQLd1FPk8S9nNJWorK8yoXhYzPxDjd66wvk1lCC1Vxa44jVWp1k-Rl65qIVJ3opFms_aQUMhb2Ft55fzjH0GphHZC2S1_vQAPNa-GkaWEuMvps3hgB23EcSLpP728q7e9344xUZLMqcy6Q';
 
-const roles = [
-  'AI/ML Engineer',
-  'Full-Stack Developer',
-  'Data Scientist',
-  'Freelancer',
-];
-
-export function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [visibleLines, setVisibleLines] = useState(0);
-
-  useEffect(() => {
-    const currentRole = roles[roleIndex];
-    const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        if (displayText.length < currentRole.length) {
-          setDisplayText(currentRole.slice(0, displayText.length + 1));
-        } else {
-          setTimeout(() => setIsDeleting(true), 2000);
-        }
-      } else {
-        if (displayText.length > 0) {
-          setDisplayText(displayText.slice(0, -1));
-        } else {
-          setIsDeleting(false);
-          setRoleIndex((prev) => (prev + 1) % roles.length);
-        }
-      }
-    }, isDeleting ? 50 : 100);
-    return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, roleIndex]);
-
-  // Animate code lines appearing one by one
-  useEffect(() => {
-    if (visibleLines < codeLines.length) {
-      const timer = setTimeout(() => {
-        setVisibleLines((prev) => prev + 1);
-      }, 300 + visibleLines * 150);
-      return () => clearTimeout(timer);
-    }
-  }, [visibleLines]);
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
+export const Hero: React.FC = () => {
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Neural network animation background */}
-      <NeuralNetworkBg />
-
-      {/* Ambient gradient orbs */}
-      <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-500/10 blur-[120px]" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-purple-500/8 blur-[100px]" />
-      <div className="absolute top-[40%] left-[30%] w-[300px] h-[300px] rounded-full bg-pink-500/5 blur-[80px]" />
-
-      {/* Grid pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }}
-      />
-
-      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 py-32 w-full">
-        <div className="grid lg:grid-cols-[1fr_auto] gap-16 items-center">
-          {/* Left content */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-6"
-            >
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm text-white/60">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                Available for freelance projects
+    <section className="px-4 sm:px-6 py-6 sm:py-12 max-w-6xl mx-auto w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        {/* Left Column (Content & CTAs) */}
+        <div className="lg:col-span-7 flex flex-col gap-5 sm:gap-6">
+          {/* Top Chips & Stickers */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white text-[#1B1B2F] font-bold text-xs sm:text-sm rounded-full shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] -rotate-1 hover:rotate-0 transition-transform">
+              <span>👋 Kem Cho! I'm Ranpriyasinh</span>
+              <span className="text-[#514532] font-semibold text-xs">(Vadodara, GJ)</span>
+            </div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#12A594] text-white font-bold text-xs sm:text-sm rounded-full shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] rotate-1 hover:rotate-0 transition-transform">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
               </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-6"
-            >
-              <span className="text-white">Ranpriyasinh</span>
-              <br />
-              <span className="gradient-text">Raulji</span>
-              <span className="text-white/15">.</span>
-            </motion.h1>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-xl md:text-2xl text-white/40 mb-8 h-10 font-light"
-            >
-              {'> '}
-              <span className="text-white/80 font-mono">{displayText}</span>
-              <span className="text-indigo-400 animate-blink font-mono">|</span>
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-base md:text-lg text-white/40 max-w-xl leading-relaxed mb-10"
-            >
-              I craft{' '}
-              <span className="text-white/70">intelligent AI systems</span>,{' '}
-              <span className="text-white/70">full-stack applications</span>, and{' '}
-              <span className="text-white/70">data-driven solutions</span>{' '}
-              that turn complex problems into elegant, production-ready products.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex flex-wrap gap-4 mb-12"
-            >
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => scrollToSection('#projects')}
-                className="px-6 py-3 bg-white text-[#0a0a0a] rounded-lg font-semibold text-sm hover:bg-white/90 transition-all duration-300"
-              >
-                View my work
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => scrollToSection('#contact')}
-                className="px-6 py-3 border border-white/20 text-white/80 rounded-lg font-semibold text-sm hover:bg-white/5 hover:border-white/30 transition-all duration-300"
-              >
-                Let's talk
-              </motion.button>
-            </motion.div>
-
-            {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7, duration: 0.8 }}
-              className="flex items-center gap-4"
-            >
-              <span className="text-xs text-white/20 uppercase tracking-widest mr-2">Find me</span>
-              <motion.a
-                href="https://github.com/Raulji-Ranpriyasinh"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -3 }}
-                className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300"
-              >
-                <Github size={18} />
-              </motion.a>
-              <motion.a
-                href="https://linkedin.com/in/ranpriyasinh-raulji"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -3 }}
-                className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300"
-              >
-                <Linkedin size={18} />
-              </motion.a>
-              <motion.a
-                href="mailto:ranpriyasinhraulji@gmail.com"
-                whileHover={{ y: -3 }}
-                className="w-10 h-10 rounded-lg border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300"
-              >
-                <Mail size={18} />
-              </motion.a>
-            </motion.div>
+              <span>Taking 1 new project this month</span>
+            </div>
           </div>
 
-          {/* Right - Code Editor Widget */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="hidden lg:block relative w-[340px]"
-          >
-            <div className="rounded-xl border border-white/[0.08] bg-[#1a1a2e]/80 backdrop-blur-xl overflow-hidden shadow-2xl shadow-indigo-500/5">
-              {/* Editor title bar */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
-                <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-                </div>
-                <span className="text-[11px] text-white/25 ml-2 font-mono">engineer.py</span>
-              </div>
+          {/* Main Headline & Narrative */}
+          <div className="flex flex-col gap-3">
+            <h1 className="font-extrabold text-3xl sm:text-4xl md:text-5xl text-[#1B1B2F] tracking-tight leading-[1.18]">
+              Your business, online.<br className="hidden sm:inline" />{' '}
+              <span className="bg-[#FFB703] px-2.5 py-0.5 rounded-lg inline-block shadow-[3px_3px_0px_#1B1B2F] border-2 border-[#1B1B2F] rotate-[-0.5deg]">
+                Built by one person
+              </span>{' '}
+              who actually answers the phone.
+            </h1>
+            <p className="text-base sm:text-lg text-[#514532] font-medium leading-relaxed max-w-xl">
+              No agency runarounds. No tech jargon. I design and engineer swift websites, reliable web apps, and native-grade mobile apps for local clinics, retailers, coaches, and boutique founders.
+            </p>
+          </div>
 
-              {/* Code content */}
-              <div className="p-4 font-mono text-[12px] leading-[1.8] min-h-[260px]">
-                {codeLines.map((line, lineIndex) => (
-                  <motion.div
-                    key={lineIndex}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={lineIndex < visibleLines ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-                    transition={{ duration: 0.3, ease: 'easeOut' }}
-                    className="flex"
-                  >
-                    <span className="text-white/15 w-6 text-right mr-3 select-none text-[11px]">{lineIndex + 1}</span>
-                    <span style={{ paddingLeft: `${line.indent * 16}px` }}>
-                      {line.tokens.length === 0 ? (
-                        <span>&nbsp;</span>
-                      ) : (
-                        line.tokens.map((token, tokenIndex) => (
-                          <span key={tokenIndex} style={{ color: token.color || '#eeffff' }}>
-                            {token.text}
-                          </span>
-                        ))
-                      )}
-                    </span>
-                  </motion.div>
-                ))}
-                {visibleLines >= codeLines.length && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex"
-                  >
-                    <span className="text-white/15 w-6 text-right mr-3 select-none text-[11px]">{codeLines.length + 1}</span>
-                    <span className="text-indigo-400 animate-blink">_</span>
-                  </motion.div>
-                )}
+          {/* Primary Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <a
+              className="w-full sm:w-auto py-3.5 px-6 bg-[#12A594] text-white rounded-full font-bold text-sm sm:text-base shadow-[3px_3px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex items-center justify-center gap-2 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none hover:bg-[#0f8e7f] transition-all cursor-pointer"
+              href={`https://wa.me/${CONTACT_CONFIG.phoneRaw}?text=Hi%20Ranpriyasinh,%20I'd%20like%20to%20discuss%20a%20project`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="material-symbols-outlined text-[1.25rem]">chat</span>
+              <span>WhatsApp Me Directly</span>
+              <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-medium ml-1">~15 min reply</span>
+            </a>
+            <a
+              className="w-full sm:w-auto py-3 px-6 bg-white text-[#1B1B2F] rounded-full font-bold text-sm sm:text-base shadow-[3px_3px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex items-center justify-center gap-2 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none hover:bg-[#faf3e7] transition-all cursor-pointer"
+              href="#work"
+            >
+              <span>See What I've Built</span>
+              <span className="material-symbols-outlined text-[1.125rem]">arrow_downward</span>
+            </a>
+          </div>
+
+          {/* Reassurance Pills */}
+          <div className="grid grid-cols-3 gap-2.5 sm:gap-3 pt-2 text-center max-w-lg">
+            <div className="bg-[#f4ede1] p-2.5 sm:p-3 rounded-2xl shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col items-center justify-center">
+              <span className="font-bold text-xs sm:text-sm text-[#1B1B2F]">⚡ Fixed Price</span>
+              <span className="text-[0.6875rem] sm:text-xs text-[#514532] font-semibold mt-0.5">No surprise bills</span>
+            </div>
+            <div className="bg-[#f4ede1] p-2.5 sm:p-3 rounded-2xl shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col items-center justify-center">
+              <span className="font-bold text-xs sm:text-sm text-[#1B1B2F]">🗣️ English & Guj</span>
+              <span className="text-[0.6875rem] sm:text-xs text-[#514532] font-semibold mt-0.5">Zero tech-jargon</span>
+            </div>
+            <div className="bg-[#f4ede1] p-2.5 sm:p-3 rounded-2xl shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col items-center justify-center">
+              <span className="font-bold text-xs sm:text-sm text-[#1B1B2F]">📱 iOS + Android</span>
+              <span className="text-[0.6875rem] sm:text-xs text-[#514532] font-semibold mt-0.5">Ready for App Store</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Tactile Portrait Card */}
+        <div className="lg:col-span-5 flex justify-center lg:justify-end my-2 sm:my-0">
+          <div className="relative bg-white p-3.5 sm:p-4 rounded-3xl shadow-[5px_5px_0px_#1B1B2F] border-2 border-[#1B1B2F] -rotate-2 max-w-[340px] sm:max-w-[360px] w-full transition-transform duration-300 hover:rotate-0 hover:scale-[1.02]">
+            <div className="overflow-hidden rounded-2xl bg-[#f4ede1] aspect-square relative border border-[#1B1B2F]/20">
+              <img
+                alt="Ranpriyasinh - Solo Developer in Vadodara"
+                className="w-full h-full object-cover object-top"
+                src={AVATAR_URL}
+              />
+              <div className="absolute top-3 right-3 bg-[#FF5A4E] text-white text-xs font-extrabold px-2.5 py-1 rounded-full shadow-[2px_2px_0px_#1B1B2F] border border-[#1B1B2F] rotate-3">
+                100% Solo Craft
               </div>
             </div>
-
-            {/* Floating accent behind the editor */}
-            <div className="absolute -inset-4 -z-10 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 blur-xl" />
-          </motion.div>
+            <div className="mt-3.5 flex items-center justify-between px-1">
+              <div className="flex flex-col">
+                <span className="font-extrabold text-lg text-[#1B1B2F] leading-tight">Ranpriyasinh</span>
+                <span className="text-xs font-semibold text-[#514532]">Solo Developer • Vadodara, Gujarat</span>
+              </div>
+              <span className="inline-flex items-center px-2.5 py-1 bg-[#f4ede1] text-[#1B1B2F] text-xs font-bold rounded-lg shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+                ☕ Adrak Chai & Code
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        onClick={() => scrollToSection('#about')}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <ArrowDown size={20} className="text-white/20" />
-        </motion.div>
-      </motion.button>
     </section>
   );
-}
+};

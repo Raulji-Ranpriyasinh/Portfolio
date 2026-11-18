@@ -1,204 +1,190 @@
-import { motion } from 'motion/react';
-import { useInView } from 'motion/react';
-import { useRef } from 'react';
-import { ArrowUpRight, Github } from 'lucide-react';
+import React from 'react';
 
-const projects = [
-  {
-    title: 'MindScribe',
-    subtitle: 'AI Note-Taking System',
-    description: 'Real-time speech-to-text knowledge capture with T5 transformer-powered summarization.',
-    tags: ['Flask', 'Transformers', 'Web Speech API', 'NLP'],
-    github: 'https://github.com/Raulji-Ranpriyasinh/MindScribe-Note-Taking-app',
-    featured: true,
-  },
-  {
-    title: 'Proposal Agent',
-    subtitle: 'RAG-Based Generation',
-    description: 'AI-powered proposal drafting assistant using vector databases for contextual retrieval from historical data.',
-    tags: ['LangChain', 'RAG', 'Vector DB', 'TypeScript'],
-    github: 'https://github.com/Raulji-Ranpriyasinh/Proposal-Agent',
-    featured: true,
-  },
-  {
-    title: 'Face Recognition Attendance',
-    subtitle: 'Computer Vision System',
-    description: 'Contactless attendance tracking using real-time face detection and recognition with OpenCV.',
-    tags: ['Python', 'OpenCV', 'Flask', 'Deep Learning'],
-    github: 'https://github.com/Raulji-Ranpriyasinh/Face-Recoginition-Attendance-System',
-    featured: true,
-  },
-  {
-    title: 'Stock Market Simulation',
-    subtitle: 'Trading Platform',
-    description: 'Comprehensive stock market simulation with real-time data visualization and portfolio tracking.',
-    tags: ['JavaScript', 'Data Viz', 'REST APIs'],
-    github: 'https://github.com/Raulji-Ranpriyasinh/Stock-Market-Simulation',
-    featured: false,
-  },
-  {
-    title: 'Movie Recommender',
-    subtitle: 'ML Recommendation Engine',
-    description: 'Collaborative filtering-based movie recommendation system with TMDB API integration.',
-    tags: ['Flask', 'ML', 'TMDB API', 'Python'],
-    github: 'https://github.com/Raulji-Ranpriyasinh/Movie-Recommendation--System',
-    featured: false,
-  },
-  {
-    title: 'Sentiment Analysis',
-    subtitle: 'NLP Classification',
-    description: 'Text sentiment classification using NLP preprocessing and machine learning techniques.',
-    tags: ['Python', 'NLP', 'Scikit-learn', 'Pandas'],
-    github: 'https://github.com/Raulji-Ranpriyasinh/sentiment-analysis',
-    featured: false,
-  },
-  {
-    title: 'Digit Recognizer',
-    subtitle: 'Deep Learning CNN',
-    description: 'Handwritten digit recognition system using convolutional neural networks on MNIST.',
-    tags: ['Python', 'TensorFlow', 'CNN', 'OpenCV'],
-    github: 'https://github.com/Raulji-Ranpriyasinh/Digit-Recoginizer',
-    featured: false,
-  },
-  {
-    title: 'E-Commerce Platform',
-    subtitle: 'Full-Stack Web App',
-    description: 'Full-stack e-commerce with product catalog, shopping cart, and checkout functionality.',
-    tags: ['HTML', 'CSS', 'JavaScript', 'REST APIs'],
-    github: 'https://github.com/Raulji-Ranpriyasinh/E-Commerce-Website',
-    featured: false,
-  },
-];
-
-export function Projects() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
-  const featuredProjects = projects.filter((p) => p.featured);
-  const otherProjects = projects.filter((p) => !p.featured);
-
+export const Projects: React.FC = () => {
   return (
-    <section id="projects" className="py-24 relative">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <span className="text-xs uppercase tracking-[0.3em] text-white/30 mb-4 block">Projects</span>
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Things I've{' '}
-            <span className="gradient-text">built</span>.
+    <section id="work" className="px-4 sm:px-6 py-12 sm:py-16 max-w-6xl mx-auto w-full">
+      <div className="flex items-center justify-between mb-8 sm:mb-10">
+        <div>
+          <span className="text-xs sm:text-sm font-bold text-[#12A594] tracking-wider uppercase block mb-1">
+            Proof of Craft
+          </span>
+          <h2 className="font-extrabold text-2xl sm:text-3xl md:text-4xl text-[#1B1B2F]">
+            Selected Work
           </h2>
-        </motion.div>
+        </div>
+        <span className="text-xs sm:text-sm bg-white text-[#1B1B2F] font-bold px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F]">
+          Real Clients
+        </span>
+      </div>
 
-        {/* Featured - bento grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          {featuredProjects.map((project, index) => (
-            <motion.a
-              key={project.title}
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 + index * 0.1 }}
-              className={`group relative p-8 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.15] transition-all duration-500 cursor-pointer overflow-hidden ${
-                index === 0 ? 'md:col-span-2' : ''
-              }`}
-            >
-              {/* Subtle top accent line */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 shrink-0" />
-                  <span className="text-xs text-white/30 uppercase tracking-wider font-medium">{project.subtitle}</span>
-                </div>
-                <ArrowUpRight
-                  size={20}
-                  className="text-white/20 group-hover:text-white/60 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300"
-                />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Case Study 1: Dr. Dave's Pediatric Clinic */}
+        <div className="bg-white p-6 rounded-3xl shadow-[4px_4px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-4 hover:-translate-y-1 hover:shadow-[6px_6px_0px_#1B1B2F] transition-all">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs bg-[#FFB703] text-[#1B1B2F] font-bold px-2.5 py-0.5 rounded-full shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+                Vadodara Healthcare
+              </span>
+              <span className="text-xs text-[#12A594] font-bold flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[#12A594] animate-pulse"></span>
+                <span>Live & Active</span>
+              </span>
+            </div>
+            <h3 className="font-extrabold text-xl text-[#1B1B2F]">
+              Dr. Dave's Pediatric Clinic
+            </h3>
+
+            {/* Mini Mockup Frame */}
+            <div className="bg-[#f4ede1] p-3 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] border border-[#1B1B2F]/15 flex flex-col gap-2">
+              <div className="flex items-center justify-between text-xs text-[#514532] font-bold">
+                <span className="flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm">schedule</span> Token #24 Serving
+                </span>
+                <span className="text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded font-semibold">
+                  Avg Wait: 12 min
+                </span>
               </div>
-              <h3 className="text-2xl font-bold text-white/90 mb-3">{project.title}</h3>
-              <p className="text-sm text-white/40 leading-relaxed mb-6">{project.description}</p>
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2.5 py-1 text-xs rounded-full border border-white/10 text-white/40 bg-white/[0.02]"
-                  >
-                    {tag}
-                  </span>
-                ))}
+              <div className="h-2 w-full bg-[#eee7dc] rounded-full overflow-hidden border border-[#1B1B2F]/10">
+                <div className="h-full bg-[#12A594] w-3/4 rounded-full"></div>
               </div>
-            </motion.a>
-          ))}
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-bold text-[#FF5A4E] uppercase tracking-wider">The Bottleneck:</span>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                Front desk swamped with 60+ daily calls for token booking. Distressed parents waiting up to 2 hours in a packed waiting lobby.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-bold text-[#12A594] uppercase tracking-wider">The Solution:</span>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                A 3-tap mobile web app with instant automated WhatsApp token notifications and live queue tracker for parents to wait comfortably at home.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-2 bg-[#FFF8EC] p-3 rounded-2xl shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex items-center justify-around text-center">
+            <div>
+              <span className="font-extrabold text-lg text-[#12A594] block">-45%</span>
+              <span className="text-[0.6875rem] text-[#514532] font-bold">Clinic Wait Times</span>
+            </div>
+            <div className="w-[1.5px] h-8 bg-[#d5c4ac]"></div>
+            <div>
+              <span className="font-extrabold text-lg text-[#1B1B2F] block">1,200+</span>
+              <span className="text-[0.6875rem] text-[#514532] font-bold">Monthly Bookings</span>
+            </div>
+          </div>
         </div>
 
-        {/* Other projects - compact grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-          {otherProjects.map((project, index) => (
-            <motion.a
-              key={project.title}
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 + index * 0.08 }}
-              className="group relative p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.15] transition-all duration-500 cursor-pointer overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <span className="text-xs text-white/30 uppercase tracking-wider font-medium">{project.subtitle}</span>
-                  <h3 className="text-lg font-semibold text-white/80 mt-1">{project.title}</h3>
-                </div>
-                <ArrowUpRight
-                  size={16}
-                  className="text-white/15 group-hover:text-white/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
-                />
-              </div>
-              <p className="text-xs text-white/35 leading-relaxed mb-4">{project.description}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {project.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 text-xs rounded-full border border-white/[0.08] text-white/30 bg-white/[0.02]"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </motion.a>
-          ))}
+        {/* Case Study 2: Surat Handloom & Fabrics */}
+        <div className="bg-white p-6 rounded-3xl shadow-[4px_4px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-4 hover:-translate-y-1 hover:shadow-[6px_6px_0px_#1B1B2F] transition-all">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs bg-[#3A86FF] text-white font-bold px-2.5 py-0.5 rounded-full shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+                Surat Textile
+              </span>
+              <span className="text-xs text-[#12A594] font-bold flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[#12A594] animate-pulse"></span>
+                <span>Scaled 4G Shop</span>
+              </span>
+            </div>
+            <h3 className="font-extrabold text-xl text-[#1B1B2F]">
+              Surat Handloom & Fabrics
+            </h3>
+
+            {/* Mini Mockup Frame */}
+            <div className="bg-[#f4ede1] p-3 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] border border-[#1B1B2F]/15 flex items-center justify-between text-xs font-bold text-[#1B1B2F]">
+              <span className="flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm text-[#3A86FF]">shopping_bag</span> 1-Click UPI Checkout
+              </span>
+              <span className="text-xs bg-white px-2 py-0.5 rounded-full border border-[#1B1B2F]/20 text-[#12A594]">
+                ⚡ 0.8s Load Time
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-bold text-[#FF5A4E] uppercase tracking-wider">The Bottleneck:</span>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                Managing orders through Instagram direct messages, losing customer details, and manually verifying UPI screenshot receipts one by one.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-bold text-[#12A594] uppercase tracking-wider">The Solution:</span>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                Lightweight, super-fast visual product catalog with instant Razorpay UPI checkout, zero manual verification, and automated courier label generation.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-2 bg-[#FFF8EC] p-3 rounded-2xl shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex items-center justify-around text-center">
+            <div>
+              <span className="font-extrabold text-lg text-[#3A86FF] block">₹4.8 Lakh</span>
+              <span className="text-[0.6875rem] text-[#514532] font-bold">1st Month Revenue</span>
+            </div>
+            <div className="w-[1.5px] h-8 bg-[#d5c4ac]"></div>
+            <div>
+              <span className="font-extrabold text-lg text-[#12A594] block">0</span>
+              <span className="text-[0.6875rem] text-[#514532] font-bold">Lost Orders</span>
+            </div>
+          </div>
         </div>
 
-        {/* GitHub CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-center"
-        >
-          <motion.a
-            href="https://github.com/Raulji-Ranpriyasinh"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/15 text-white/60 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300 text-sm font-medium"
-          >
-            <Github size={18} />
-            View all on GitHub
-          </motion.a>
-        </motion.div>
+        {/* Case Study 3: FieldForce Logistics App */}
+        <div className="bg-white p-6 rounded-3xl shadow-[4px_4px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex flex-col justify-between gap-4 hover:-translate-y-1 hover:shadow-[6px_6px_0px_#1B1B2F] transition-all">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs bg-[#FF5A4E] text-white font-bold px-2.5 py-0.5 rounded-full shadow-[1px_1px_0px_#1B1B2F] border border-[#1B1B2F]">
+                Logistics & Fleet
+              </span>
+              <span className="text-xs text-[#12A594] font-bold flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[#12A594] animate-pulse"></span>
+                <span>React Native</span>
+              </span>
+            </div>
+            <h3 className="font-extrabold text-xl text-[#1B1B2F]">
+              FieldForce Logistics App
+            </h3>
+
+            {/* Mini Mockup Frame */}
+            <div className="bg-[#f4ede1] p-3 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] border border-[#1B1B2F]/15 flex items-center justify-between text-xs font-bold text-[#1B1B2F]">
+              <span className="flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm text-[#FF5A4E]">draw</span> Digital E-Sign on Glass
+              </span>
+              <span className="text-xs bg-white px-2 py-0.5 rounded-full border border-[#1B1B2F]/20 text-[#12A594]">
+                Offline Synced
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-bold text-[#FF5A4E] uppercase tracking-wider">The Bottleneck:</span>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                Delivery drivers carrying physical paper logbooks, resulting in lost signatures, delayed billings, and weekly invoice disputes with clients.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-bold text-[#12A594] uppercase tracking-wider">The Solution:</span>
+              <p className="text-xs sm:text-sm text-[#514532] font-medium leading-relaxed">
+                Offline-first React Native Android & iOS app with GPS proof of delivery, on-screen customer signature, and instant automated PDF invoice dispatch.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-2 bg-[#FFF8EC] p-3 rounded-2xl shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] flex items-center justify-around text-center">
+            <div>
+              <span className="font-extrabold text-lg text-[#12A594] block">Same-Day</span>
+              <span className="text-[0.6875rem] text-[#514532] font-bold">Invoice Clearance</span>
+            </div>
+            <div className="w-[1.5px] h-8 bg-[#d5c4ac]"></div>
+            <div>
+              <span className="font-extrabold text-lg text-[#1B1B2F] block">Zero</span>
+              <span className="text-[0.6875rem] text-[#514532] font-bold">Billing Disputes</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
-}
+};

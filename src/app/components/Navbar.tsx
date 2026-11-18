@@ -1,150 +1,67 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import { Menu, X } from 'lucide-react';
+import React from 'react';
 
-const navItems = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Contact', href: '#contact' },
-];
+const LOGO_URL = 'https://lh3.googleusercontent.com/aida/ALJJyrCiweoSW2UEurn1BwG-9Ey9p5N7oqUzws2fh30xaTyPF84Sdd4s_Daxc3R49tFTQuGWfh02f_uTFoKa8dYnyn-7SNKqqwbsHDIvMAHpLl6WQl1CrhGlEOzccw0WcCvTAuVTLjkkTJanzISpIChNNmseM90yHnE6GsUSY7a3JrMiw_0N5s7PkFjvosllLdz8Ij0Juvf5eJmx6WpITmsUtuljt5Jd-BdalgyCZa5tL-g';
+const AVATAR_URL = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCacnR8gkBoAslMZKSI5RplHbnmHJz5O3Iq75V4sIafYZ-jVv9VjHH1hm5ApQjLB-6YznMGCBZLaXdzIKXEv3vuxyF3VLQLd1FPk8S9nNJWorK8yoXhYzPxDjd66wvk1lCC1Vxa44jVWp1k-Rl65qIVJ3opFms_aQUMhb2Ft55fzjH0GphHZC2S1_vQAPNa-GkaWEuMvps3hgB23EcSLpP728q7e9344xUZLMqcy6Q';
 
-export function Navbar() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-      const sections = navItems.map((item) => item.href.slice(1));
-      const currentSection = sections.find((section) => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-      if (currentSection) {
-        setActiveSection(currentSection);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMobileMenuOpen(false);
-  };
-
+export const Navbar: React.FC = () => {
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? 'bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/5'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <motion.button
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            onClick={() => scrollToSection('#home')}
-            className="text-lg font-bold tracking-tight"
+    <header className="fixed top-0 w-full z-50 pt-safe bg-[#fff9ef]/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-[#1B1B2F]/10">
+      <div className="max-w-6xl mx-auto h-20 px-4 sm:px-6 flex items-center justify-between gap-4">
+        {/* Brand & Wordmark */}
+        <a href="#" className="flex items-center gap-2 group cursor-pointer">
+          <img
+            alt="Ranpriyasinh Wordmark Logo"
+            className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
+            src={LOGO_URL}
+            onError={(e) => {
+              // Graceful fallback if image CDN is unreachable offline
+              (e.currentTarget as HTMLElement).style.display = 'none';
+            }}
+          />
+          <span className="font-extrabold text-xl sm:text-2xl text-[#1e1b14] tracking-tight">
+            Ranpriyasinh
+          </span>
+          <span className="text-xs sm:text-sm font-semibold text-[#514532] bg-[#f4ede1] px-2 py-0.5 rounded-full border border-[#1B1B2F]/20 ml-1 hidden xs:inline-block">
+            Solo Dev
+          </span>
+        </a>
+
+        {/* Desktop Navigation Links */}
+        <nav className="hidden md:flex items-center gap-6 text-sm font-bold text-[#514532]">
+          <a href="#services" className="hover:text-[#1B1B2F] transition-colors py-1">Services</a>
+          <a href="#process" className="hover:text-[#1B1B2F] transition-colors py-1">Process</a>
+          <a href="#work" className="hover:text-[#1B1B2F] transition-colors py-1">Selected Work</a>
+          <a href="#comparison" className="hover:text-[#1B1B2F] transition-colors py-1">Why Solo?</a>
+          <a href="#about" className="hover:text-[#1B1B2F] transition-colors py-1">About</a>
+          <a href="#pricing" className="hover:text-[#1B1B2F] transition-colors py-1">Packages</a>
+          <a href="#faq" className="hover:text-[#1B1B2F] transition-colors py-1">FAQ</a>
+        </nav>
+
+        {/* Right CTA & Avatar Indicator */}
+        <div className="flex items-center gap-3">
+          <a
+            href="#contact"
+            className="hidden sm:inline-flex items-center justify-center h-10 px-5 rounded-full bg-[#ffb703] text-[#1B1B2F] font-bold text-sm shadow-[2px_2px_0px_#1B1B2F] border-2 border-[#1B1B2F] hover:bg-[#ffba27] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all"
           >
-            <span className="inline-flex items-center gap-2.5">
-              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm tracking-tight">RR</span>
-              <span className="hidden sm:inline">
-                <span className="text-white/90 font-semibold tracking-tight">R. Raulji</span>
-                <span className="text-white/20 ml-1.5 text-xs font-normal tracking-wider hidden lg:inline">/ AI Engineer</span>
-              </span>
+            Let's talk
+          </a>
+          <a
+            href="#about"
+            className="relative flex items-center justify-center p-0.5 rounded-full border-2 border-[#1B1B2F] shadow-[2px_2px_0px_#1B1B2F] cursor-pointer hover:scale-105 transition-transform"
+            title="Ranpriyasinh - Available for 1 project"
+          >
+            <img
+              alt="Ranpriyasinh Profile"
+              className="w-8 h-8 rounded-full object-cover object-top"
+              src={AVATAR_URL}
+            />
+            <span className="absolute -bottom-1 -right-1 flex h-3.5 w-3.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border border-white"></span>
             </span>
-          </motion.button>
-
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item, index) => (
-              <motion.button
-                key={item.name}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index }}
-                onClick={() => scrollToSection(item.href)}
-                className={`px-3 py-1.5 text-sm rounded-full transition-all duration-300 relative ${
-                  activeSection === item.href.slice(1)
-                    ? 'text-white'
-                    : 'text-white/40 hover:text-white/70'
-                }`}
-              >
-                {item.name}
-                {activeSection === item.href.slice(1) && (
-                  <motion.div
-                    layoutId="activeNav"
-                    className="absolute inset-0 bg-white/10 rounded-full border border-white/10"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </motion.button>
-            ))}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="ml-4 flex items-center gap-2"
-            >
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs text-emerald-400/80 font-medium">Available for work</span>
-            </motion.div>
-          </div>
-
-          <button
-            className="md:hidden p-2 text-white/60 hover:text-white"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          </a>
         </div>
       </div>
-
-      {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="md:hidden bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5"
-        >
-          <div className="px-6 py-4 space-y-1">
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className={`block w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all duration-300 ${
-                  activeSection === item.href.slice(1)
-                    ? 'bg-white/10 text-white'
-                    : 'text-white/40 hover:text-white/70 hover:bg-white/5'
-                }`}
-              >
-                {item.name}
-              </button>
-            ))}
-            <div className="flex items-center gap-2 px-4 pt-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs text-emerald-400/80 font-medium">Available for work</span>
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </motion.nav>
+    </header>
   );
-}
+};
